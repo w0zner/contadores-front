@@ -13,15 +13,21 @@
                         <div class="col-xs-12">
                             <input class="form-control" type="email" placeholder="Correo electrónico" formControlName="email">
                         </div>
+                        <div class="col text-danger">
+                          <p *ngIf="campoValido('email')">El correo debe ser válido</p>
+                        </div>
                     </div>
                     <div class="form-group">
                         <div class="col-xs-12">
                             <input class="form-control" type="password" placeholder="Password" formControlName="password">
                         </div>
+                        <div class="col text-danger">
+                          <p *ngIf="campoValido('password')">La constraseña debe ser válida</p>
+                        </div>
                     </div>
                     <div class="form-group text-center m-t-20">
                         <div class="col-xs-12">
-                            <button class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light" type="submit">Iniciar Sesión</button>
+                            <button class="btn btn-dark btn-lg btn-block text-uppercase waves-effect waves-light" type="submit">Iniciar Sesión</button>
                         </div>
                     </div>
 
@@ -30,7 +36,7 @@
                             ¿Aún no tienes cuenta? <a class="text-primary m-l-5 cursor" [routerLink]="['/registro']"><b>Registrarse</b></a>
                         </div>
                     </div>
-                </form>                
+                </form>
             </div>
         </div>
     </section>

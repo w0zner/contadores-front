@@ -12,19 +12,15 @@
             <!-- ============================================================== -->
             <div class="navbar-header">
                 <a class="navbar-brand">
-                    <!-- Logo icon --><b>
-                        <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
-                        <!-- Dark Logo icon -->
+                    <span>
                         <img src="../../../assets/assets/images/logo-icon.png" alt="homepage" class="dark-logo" />
-                        <!-- Light Logo icon -->
-                        <img src="../../../assets/assets/images/logo-light-icon.png" alt="homepage" class="light-logo" />
-                    </b>
-                    <!--End Logo icon -->
-                    <!-- Logo text --><span>
-                        <!-- dark Logo text -->
-                        <img src="../../../assets/assets/images/logo-text.png" alt="homepage" class="dark-logo" />
-                        <!-- Light Logo text -->    
-                        <img src="../../../assets/assets/images/logo-light-text.png" class="light-logo" alt="homepage" /></span> </a>
+                        <!-- <img src="../../../assets/assets/images/logo-light-icon.png" alt="homepage" class="light-logo" /> -->
+                    </span>
+                    <span>
+                          <img src="../../../assets/assets/images/logo-text.png" alt="homepage" class="dark-logo" />
+                          <!-- <img src="../../../assets/assets/images/logo-light-text.png" class="light-logo" alt="homepage" /> -->
+                    </span>
+                </a>
             </div>
             <!-- ============================================================== -->
             <!-- End Logo -->
@@ -35,14 +31,14 @@
                 <!-- ============================================================== -->
                 <ul class="navbar-nav mr-auto">
                     <!-- This is  -->
-                    
-                    
+
+
                     <li class="nav-item hidden-sm-down"></li>
                 </ul>
                 <!-- ============================================================== -->
                 <!-- User profile and search -->
                 <!-- ============================================================== -->
-                <ul class="navbar-nav my-lg-0">                    
+                <ul class="navbar-nav my-lg-0">
                     <!-- ============================================================== -->
                     <!-- Profile -->
                     <!-- ============================================================== -->
@@ -57,19 +53,19 @@
                                             <p class="text-muted">alonso@gmail.com</p></div>
                                     </div>
                                 </li>
-                                <li role="separator" class="divider"></li>                                
+                                <li role="separator" class="divider"></li>
                                 <li>
-                                    
-                                <li *ngFor="let item of menuService.menu">
+
+                                <li>
                                     <a class="has-arrow waves-effect waves-dark" aria-expanded="false">
                                         <i class="mdi mdi-folder-lock-open">
                                             Documentos
                                         </i>
-                                    </a>                                                                    
-                                </li> 
+                                    </a>
+                                </li>
                                 <li><a class="cursor" ><i class="mdi mdi-cloud-download"> Mis Documentos</i></a></li>
                                 <li role="separator" class="divider"></li>
-                                <li><a class="cursor" ><i class="fa fa-power-off"></i>Salir</a></li>
+                                <li><a (click)="logout()" class="cursor" ><i class="fa fa-power-off"></i>Salir</a></li>
                             </ul>
                         </div>
                     </li>
@@ -83,11 +79,11 @@
     <!-- ============================================================== -->
     <!-- Left Sidebar - style you can find in sidebar.scss  -->
     <!-- ============================================================== -->
-    
+
     <!-- ============================================================== -->
     <!-- End Left Sidebar - style you can find in sidebar.scss  -->
     <!-- ============================================================== -->
-    
+
     <!-- ============================================================== -->
     <!-- Page wrapper  -->
     <!-- ============================================================== -->
@@ -97,9 +93,9 @@
         <!-- Container fluid  -->
         <!-- ============================================================== -->
         <div class="container-fluid">
-            
+
             <router-outlet></router-outlet>
-            
+
         </div>
         <!-- ============================================================== -->
         <!-- End Container fluid  -->
