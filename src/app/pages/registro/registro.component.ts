@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UsuarioService } from 'src/app/services/usuario.service';
 
 @Component({
   selector: 'app-registro',
@@ -11,7 +12,7 @@ export class RegistroComponent {
   registroForm: FormGroup;
   formSubmit= false
 
-  constructor(private fb: FormBuilder){
+  constructor(private fb: FormBuilder, private usuarioService: UsuarioService){
     this.registroForm = this.fb.group({
       nombre: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -29,7 +30,8 @@ export class RegistroComponent {
     if(this.registroForm.invalid){
       return;
     }
-    console.log(this.registroForm.value, this.registroForm.valid)
+    //console.log(this.registroForm.value, this.registroForm.valid)
+    this.usuarioService.crearUsuario(this.registroForm.value)
   }
 
   campoValido(campo: string): boolean{
