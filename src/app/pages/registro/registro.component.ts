@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import Swal from 'sweetalert2'
 import { UsuarioService } from 'src/app/services/usuario.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-registro',
@@ -12,7 +14,7 @@ export class RegistroComponent {
   registroForm: FormGroup;
   formSubmit= false
 
-  constructor(private fb: FormBuilder, private usuarioService: UsuarioService){
+  constructor(private fb: FormBuilder, private usuarioService: UsuarioService, private router: Router){
     this.registroForm = this.fb.group({
       nombre: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -31,7 +33,25 @@ export class RegistroComponent {
       return;
     }
     //console.log(this.registroForm.value, this.registroForm.valid)
-    this.usuarioService.crearUsuario(this.registroForm.value)
+    this.usuarioService.crearUsuario(this.registroForm.value).subscribe({
+      next: (response) => {
+        console.log(response)
+        Swal.fire({
+          icon: "success",
+          title: "Registro exitoso!",
+          text: "Estas listo para iniciar sesión..",
+        });
+
+        this.router.navigateByUrl('/login')
+      },
+      error: (error) => {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: error.error.msg,
+        });
+      }
+    })
   }
 
   campoValido(campo: string): boolean{

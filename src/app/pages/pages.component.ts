@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { UsuarioService } from '../services/usuario.service';
 
 @Component({
   selector: 'app-pages',
@@ -9,7 +10,7 @@ import { Router } from '@angular/router';
 export class PagesComponent implements OnInit {
 
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private usuarioService: UsuarioService) {
 
   }
 
@@ -18,6 +19,7 @@ export class PagesComponent implements OnInit {
   }
 
   logout() {
+    this.usuarioService.logout()
     this.router.navigateByUrl('/login')
   }
 
