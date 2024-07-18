@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Registro } from '../interfaces/registro.interface';
 import { Login } from '../interfaces/login.interface';
-import { tap } from 'rxjs';
+import { catchError, map, Observable, of, tap } from 'rxjs';
 
 const url = environment.url_raiz
 
@@ -32,7 +32,28 @@ export class UsuarioService {
     localStorage.removeItem('token')
   }
 
+  refreshToken():Observable<boolean> {
+    return this.http.get(`${url}/login/refreshToken`, 
+      {headers: {'x-token': this.getToken()}}).pipe(
+        map((resp: any) => {
+          this.almacenarLocalStorage(resp.token)
+          return true
+        }),
+        catchError(error => of(false))
+      )
+  }
+
   almacenarLocalStorage(token: string) {
     localStorage.setItem('token', token)
+  }
+
+  getToken():string {
+    return localStorage.getItem('token') || ''
+  }
+
+  getheaders() {
+    return {
+      headers: { 'x-token': this.getToken() }
+    }
   }
 }
