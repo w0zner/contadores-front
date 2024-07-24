@@ -9,8 +9,10 @@ import { UsuarioService } from '../services/usuario.service';
 })
 export class PagesComponent implements OnInit {
 
+  public usuarioLogueado: any
 
   constructor(private router: Router, private usuarioService: UsuarioService) {
+    this.usuarioLogueado = this.usuarioService.usuario
 
   }
 
