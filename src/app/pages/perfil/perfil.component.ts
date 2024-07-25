@@ -56,6 +56,9 @@ export class PerfilComponent implements OnInit {
       if (result.isConfirmed) {
         console.log("Actualizando...")
         console.log(this.perfilForm)
+
+        this.usuarioService.
+
         /*Swal.fire({
           title: "Deleted!",
           text: "Your file has been deleted.",
