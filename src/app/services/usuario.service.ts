@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Registro } from '../interfaces/registro.interface';
@@ -36,34 +36,19 @@ export class UsuarioService {
   }
 
   refreshToken():Observable<boolean> {
-    return this.http.get(`${url}/login/refreshToken`, 
+    return this.http.get(`${url}/login/refreshToken`,
       {headers: {'x-token': this.getToken()}}).pipe(
         map((resp: any) => {
-          const {nombre,
-            email,
-            curp,
-            telefono,
-            password,
-            password2,
-            role,
-            uid} = resp.usuario
+          const {nombre, email, curp, telefono, password, password2, role, uid} = resp.usuario
 
           this.almacenarLocalStorage(resp.token)
 
-          this.usuario = new Usuarios(nombre,
-            email,
-            curp,
-            telefono,
-            '',
-            '',
-            role,
-            uid)
-            console.log("Desde refresh ",this.usuario)
+          this.usuario = new Usuarios(nombre, email, curp, telefono, '', '', role, uid)
+          console.log("Desde refresh ",this.usuario)
 
           return true
         }),
-        catchError(error => of(false))
-      )
+        catchError(error => of(false)))
   }
 
   almacenarLocalStorage(token: string) {
@@ -78,5 +63,9 @@ export class UsuarioService {
     return {
       headers: { 'x-token': this.getToken() }
     }
+  }
+
+  actualizarUsuario(id: string, data: {nombre: string, email: string, curp: string, telefono: string, role: 'ADMIN_ROLE' | 'USER_ROLE'}) {
+    return this.http.put(`${url}/usuarios/${id}`, data, this.getheaders())
   }
 }

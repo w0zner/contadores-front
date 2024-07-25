@@ -20,12 +20,15 @@ export class PerfilComponent implements OnInit {
       nombre: [this.usuario.nombre, Validators.required],
       email: [this.usuario.email, Validators.email],
       curp: [this.usuario.curp, Validators.required],
-      telefono: [this.usuario.telefono, Validators.required]
+      telefono: [this.usuario.telefono, Validators.required],
+      role: [this.usuario.role, Validators.required]
      })
+
+     console.log(this.usuario)
   }
 
   ngOnInit(): void {
-   
+
   }
 
   verificarForm():boolean{
@@ -41,7 +44,7 @@ export class PerfilComponent implements OnInit {
     this.isSubmit = true
     if(this.perfilForm.invalid) {
       return;
-    } 
+    }
 
     Swal.fire({
       title: "Confirma la acción?",
@@ -57,17 +60,30 @@ export class PerfilComponent implements OnInit {
         console.log("Actualizando...")
         console.log(this.perfilForm)
 
-        this.usuarioService.
 
-        /*Swal.fire({
-          title: "Deleted!",
-          text: "Your file has been deleted.",
-          icon: "success"
-        });*/
+
+        this.usuarioService.actualizarUsuario(this.usuario.uid, this.perfilForm.value).subscribe({
+          next: (resp: any) => {
+            console.log("Actualizado ",resp)
+            Swal.fire({
+              title: "Registro Actualizado",
+              text: resp.msg,
+              icon: "success"
+            });
+          },
+          error: (error) => {
+            console.log(error)
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Ocurrio un error al actualizar",
+            });
+          }
+        })
       }
     });
 
-      
+
   }
 
 }

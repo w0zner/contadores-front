@@ -11,6 +11,34 @@ export class PagesComponent implements OnInit {
 
   public usuarioLogueado: any
 
+  menu: any[] = [
+    {
+      titulo: 'Perfil',
+      icono: 'mdi-home',
+      url: '/dashboard/perfil'
+    },
+    {
+      titulo: 'Usuarios',
+      icono: 'mdi-account-multiple',
+      url: '/dashboard/usuarios'
+    },
+    {
+      titulo: 'Nuevo Documento',
+      icono: 'mdi-file',
+      url: '/dashboard/nuevo-documento'
+    },
+    {
+      titulo: 'Documentos Generales',
+      icono: 'mdi-folder-lock-open',
+      url: '/dashboard/documentos'
+    },
+    {
+      titulo: 'Mis Documentos',
+      icono: 'mdi-cloud-download',
+      url: '/dashboard/documentos/mis-documentos/123'
+    },
+  ]
+
   constructor(private router: Router, private usuarioService: UsuarioService) {
     this.usuarioLogueado = this.usuarioService.usuario
 
