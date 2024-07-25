@@ -17,13 +17,12 @@
               <!-- Inicio Perfil -->
               <div class="tab-pane active" id="settings" role="tabpanel">
                   <div class="card-body">
-                      <form class="form-horizontal form-material"
-                      >
+                      <form class="form-horizontal form-material" [formGroup]="perfilForm" (ngSubmit)="actualizarPerfil()">
                           <div class="form-group">
                               <label class="col-md-12 font-weight-bold">Nombre completo</label>
                               <div class="col-md-12">
                                   <input type="text" placeholder="Nombre completo"  class="form-control form-control-line"
-                                    value="{{usuario.nombre}}"
+                                    formControlName="nombre"
                                   >
                               </div>
                           </div>
@@ -31,7 +30,7 @@
                               <label class="col-md-12 font-weight-bold">Correo electrónico</label>
                               <div class="col-md-12">
                                   <input type="email" placeholder="Email" class="form-control form-control-line" name="example-email" id="example-email"
-                                  value="{{usuario.email}}"
+                                  formControlName="email"
                                   >
                               </div>
                           </div>
@@ -39,7 +38,7 @@
                               <label class="col-md-12 font-weight-bold">CURP</label>
                               <div class="col-md-12">
                                   <input type="text" placeholder="" pattern="[0-9A-Z]*" class="form-control form-control-line"
-                                  value="{{usuario.curp}}"
+                                  formControlName="curp"
                                   >
                               </div>
                           </div>
@@ -47,20 +46,20 @@
                               <label class="col-md-12 font-weight-bold">Telefóno</label>
                               <div class="col-md-12">
                                   <input type="text" placeholder="000"  class="form-control form-control-line"
-                                  value="{{usuario.telefono}}"
+                                  formControlName="telefono"
                                   >
                               </div>
                           </div>
-                          <div class="row">
-                              <div class="col text-danger">
-
+                          <div class="row mb-3">
+                              <div class="col text-danger" *ngIf="!perfilForm.valid && isSubmit">
+                                <p>Verifique el formulario, hay campos inválidos</p>
                               </div>
                           </div>
                           <div
                           ></div>
                           <div class="form-group">
                               <div class="col-sm-12">
-                                  <button type="submit" class="btn btn-success">Actualizar datos</button>
+                                  <button type="submit" class="btn btn-success" >Actualizar datos</button>
                               </div>
                           </div>
                       </form>
