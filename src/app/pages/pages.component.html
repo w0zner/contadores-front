@@ -54,39 +54,20 @@
                                     </div>
                                 </li>
                                 <li role="separator" class="divider"></li>
-                                <li>
 
-                                <li>
-                                    <a class="has-arrow waves-effect waves-dark" aria-expanded="false" [routerLink]="['/dashboard/perfil']">
-                                        <i class="mdi mdi-home">
-                                            Perfil
+
+                                <li *ngFor="let item of menu">
+                                    <a class="has-arrow waves-effect waves-dark" aria-expanded="false" [routerLink]="item.url">
+                                        <i [class]="item.icono">
+                                            {{item.titulo}}
                                         </i>
                                     </a>
                                 </li>
-                                <li>
-                                    <a class="has-arrow waves-effect waves-dark" aria-expanded="false" [routerLink]="['/dashboard/usuarios']">
-                                        <i class="mdi mdi-account-multiple">
-                                            Usuarios
-                                        </i>
-                                    </a>
-                                </li>
-                                <li>
-                                  <a class="has-arrow waves-effect waves-dark" aria-expanded="false" [routerLink]="['/dashboard/nuevo-documento']">
-                                      <i class="mdi mdi-file">
-                                          Nuevo Documento
-                                      </i>
-                                  </a>
-                              </li>
-                              <li>
-                                <a class="has-arrow waves-effect waves-dark" aria-expanded="false" [routerLink]="['/dashboard/documentos']">
-                                    <i class="mdi mdi-folder-lock-open">
-                                        Documentos Generales
-                                    </i>
-                                </a>
-                            </li>
-                                <li>
+
+
+<!--                                 <li>
                                   <a class="cursor" [routerLink]="['/dashboard/documentos/mis-documentos/123']"><i class="mdi mdi-cloud-download"> Mis Documentos</i></a>
-                                </li>
+                                </li> -->
                                 <li role="separator" class="divider"></li>
                                 <li><a (click)="logout()" class="cursor" ><i class="fa fa-power-off"></i>Salir</a></li>
                             </ul>

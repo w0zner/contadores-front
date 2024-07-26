@@ -25,7 +25,7 @@ export class UsuarioService {
     return this.http.post(`${url}/login/`, data).pipe(
       tap(
         (response: any) => {
-          this.almacenarLocalStorage(response.token)
+          this.almacenarLocalStorage(response.token, response.menu)
         }
       )
     )
@@ -41,7 +41,7 @@ export class UsuarioService {
         map((resp: any) => {
           const {nombre, email, curp, telefono, password, password2, role, uid} = resp.usuario
 
-          this.almacenarLocalStorage(resp.token)
+          this.almacenarLocalStorage(resp.token, resp.menu)
 
           this.usuario = new Usuarios(nombre, email, curp, telefono, '', '', role, uid)
           console.log("Desde refresh ",this.usuario)
@@ -51,12 +51,17 @@ export class UsuarioService {
         catchError(error => of(false)))
   }
 
-  almacenarLocalStorage(token: string) {
+  almacenarLocalStorage(token: string, menu: any) {
     localStorage.setItem('token', token)
+    localStorage.setItem('menu', JSON.stringify(menu))
   }
 
   getToken():string {
     return localStorage.getItem('token') || ''
+  }
+
+  getMenu():any {
+    return localStorage.getItem('menu') || ''
   }
 
   getheaders() {
