@@ -11,6 +11,7 @@ import { EditarDocumentoComponent } from './editar-documento/editar-documento.co
 import { DocumentosComponent } from './documentos/documentos.component';
 import { ArchivosComponent } from './archivos/archivos.component';
 import { MisDocumentosComponent } from './mis-documentos/mis-documentos.component';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 
 
@@ -21,6 +22,7 @@ import { MisDocumentosComponent } from './mis-documentos/mis-documentos.componen
     RouterModule,
     PagesRoutingModule,
     FormsModule,
+    NgxPaginationModule,
     ReactiveFormsModule
   ],
   exports: [

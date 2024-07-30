@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { BuscarService } from 'src/app/services/buscar.service';
+import { DocumentosService } from 'src/app/services/documentos.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import Swal from 'sweetalert2'
 
@@ -14,7 +16,7 @@ export class PerfilComponent implements OnInit {
   public usuario: any
   public isSubmit: boolean = false
 
-  constructor(private usuarioService: UsuarioService, private fb: FormBuilder){
+  constructor(private usuarioService: UsuarioService, private fb: FormBuilder, private buscarService: BuscarService){
     this.usuario=this.usuarioService.usuario
     this.perfilForm = this.fb.group({
       nombre: [this.usuario.nombre, Validators.required],
@@ -28,7 +30,16 @@ export class PerfilComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+/*     this.buscarService.buscar('usuarios', 'rodrigo').subscribe({
+      next: (resp) => {
+        console.log("BUSCAR ",resp)
+      }
+    }) */
+    /* this.documentosService.cargarMisDocumentos('66a79c7de64ed928663bdb2b').subscribe({
+      next: resp => {
+        console.log(resp)
+      },
+    }) */
   }
 
   verificarForm():boolean{

@@ -8,6 +8,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { RegistroComponent } from './pages/registro/registro.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { NgxPaginationModule } from 'ngx-pagination';
 import { PagesModule } from './pages/pages.module';
 
 
@@ -23,6 +24,7 @@ import { PagesModule } from './pages/pages.module';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    NgxPaginationModule,
     PagesModule
   ],
   providers: [],

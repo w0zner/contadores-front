@@ -37,7 +37,7 @@ export class LoginComponent {
         console.log(response)
 
         Swal.fire({
-          position: "top-end",
+          position: "top",
           icon: "success",
           title: "Bienvenido!",
           showConfirmButton: false,

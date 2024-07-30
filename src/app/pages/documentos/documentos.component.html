@@ -1,1 +1,138 @@
-<p>documentos works!</p>
+<div class="row animated fadeIn fast">
+  <div class="col-12">
+      <div class="card">
+          <div class="card-body">
+
+              <input type="text"
+                      class="form-control"
+                      placeholder="Buscar Factura"
+                      #txtTermino
+                      />
+
+          </div>
+      </div>
+  </div>
+</div>
+<!-- ============================================================== (keyup)="buscar( txtTermino.value )"-->
+<!-- Start Page Content -->
+<!-- ============================================================== -->
+<!-- Row -->
+<div class="row">
+  <!-- Column -->
+  <div class="col-lg-12 col-xlg-12 col-md-7">
+      <div class="card">
+          <!-- Nav tabs -->
+          <ul class="nav nav-tabs profile-tab" role="tablist">
+              <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#profile" role="tab">Datos</a> </li>
+          </ul>
+          <!-- Tab panes -->
+          <div class="tab-content">
+              <!--second tab-->
+              <div class="tab-pane active" id="profile" role="tabpanel">
+
+                  <div class="card-body">
+                      <h4 class="card-title">Historial de documentos</h4>
+                      <h6 class="card-subtitle"></h6>
+                      <div class="table-responsive m-t-40">
+                          <table id="example23" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
+                              <thead>
+                                  <tr>
+                                      <th>Nombre</th>
+                                      <th>Usuario</th>
+                                      <th>Fecha</th>
+                                      <th>Descargar</th>
+                                      <th>Acciones</th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  <!-- <tr *ngFor="let documento of documentos | paginate: { itemsPerPage: 25, currentPage: p }">
+                                      <td>{{ documento.nombre }}</td>
+                                      <td>{{ documento.usuario.nombre }}</td>
+                                      <td>{{ documento.fecha }}</td>
+                                      <td class="cursor" ><a target="_blank" href="{{documento.documentoUrl}}" download="{{documento.documentoUrl}}" >{{documento.pdf}}</a></td>
+                                      <td class="text-nowrap text-center">
+                                          <a data-toggle="modal" data-target=".example2-modal-lg"
+                                              class="cursor"
+                                              (click)="editarDocumento(documento._id)">
+                                              <i class="fa fa-pencil text-inverse m-r-10"></i>
+                                          </a>
+                                          <a data-toggle="tooltip"
+                                              data-original-title="Borrar"
+                                              class="cursor"
+                                              (click)="eliminarDocumento(documento)">
+                                              <i class="fa fa-close text-danger"></i>
+                                          </a>
+                                      </td>
+                                  </tr> -->
+
+                              </tbody>
+                          </table>
+                          <!-- <pagination-controls (pageChange)="p = $event"></pagination-controls> -->
+                      </div>
+                  </div>
+
+              </div>
+
+          </div>
+      </div>
+  </div>
+  <!-- Column -->
+</div>
+<!-- Row -->
+<!-- ============================================================== -->
+<!-- End PAge Content -->
+<!-- ============================================================== -->
+
+
+<div class="row">
+  <div class="col-md-4">
+      <div class="card">
+          <div class="card-body">
+          <!-- sample modal content -->
+              <div class="modal fade example2-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+                  <div class="modal-dialog modal-lg">
+                      <div class="modal-content">
+                          <div class="modal-header">
+                              <h4 class="modal-title" id="myLargeModalLabel">Modificar datos del paciente</h4>
+                              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                          </div>
+                          <div class="card">
+                              <form
+                                 >
+                              <div class="card-body">
+                                  <div class="form-body">
+                                      <div class="row p-t-20">
+                                          <div class="col-md-6">
+                                              <div class="form-group">
+                                                  <label class="control-label">Nombre del documento</label>
+                                                  <input type="text"  class="form-control" formControlName="nombre" placeholder="Brenda Torres" >
+                                              </div>
+                                              <div class="row">
+                                                  <div class="col text-danger">
+                                                      <!-- <p *ngIf="campoNoValido('nombre');"> Agregue un nombre</p> -->
+                                                  </div>
+                                              </div>
+                                          </div>
+                                          <!--/span    [formGroup]="docForm"   -->
+
+                                          <!--/span (click)="actualizarDocumento();"-->
+
+                                      <!--/row-->
+                                      </div>
+                                      <div class="form-actions">
+                                          <button  class="btn btn-success"> <i class="fa fa-check" ></i> Guardar </button>
+                                      </div>
+                                  </div>
+                              </div>
+                              </form>
+                      </div>
+                  </div>
+                  <!-- /.modal-content -->
+              </div>
+              <!-- /.modal-dialog -->
+          </div>
+          <!-- /.modal -->
+      </div>
+  </div>
+  </div>
+  </div>
