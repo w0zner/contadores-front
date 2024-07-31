@@ -1,1 +1,53 @@
-<p>nuevo-documento works!</p>
+<div class="row">
+  <!-- Column -->
+  <div class="col-lg-12 col-xlg-12 col-md-7">
+      <div class="card">
+        <ul class="nav nav-tabs profile-tab" role="tablist">
+            <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#profile" role="tab">
+              <h4 class="card-title">Nuevo documento</h4>
+
+            </a> </li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane active" id="profile" role="tabpanel">
+                <div class="card-body">
+                  <form class="form-material m-t-10"  (submit)="crearNuevoDocumento();" [formGroup]="nuevoDocumentoForm">
+                      <div class="form-group">
+                          <label for="nombre">Nombre del documento</label>
+                          <input type="text" class="form-control form-control-line" placeholder=""
+                          formControlName="nombre">
+                          <div class="col text-danger">
+                              <p *ngIf="campoNoValido('nombre');"> Agregue el nombre a su documento</p>
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <label>Elija el cliente a quien se le añadirá el archivo</label>
+                          <select class="form-control" formControlName="usuario">
+                              <option></option>
+                              <option *ngFor="let usuario of usuarios" value="{{usuario.uid}}">{{ usuario.nombre }} - {{ usuario.email}} </option>
+                          </select>
+                          <div class="col text-danger">
+                              <p *ngIf="campoNoValido('usuario');"> Seleccione un cliente</p>
+                          </div>
+                      </div>
+                      <div class="form-group row">
+                          <label for="example-date-input" class="col-2 col-form-label">Fecha de elaboración</label>
+                          <div class="col-4">
+                              <input class="form-control" type="date" value="2021-08-19" id="example-date-input" formControlName="fecha">
+                          </div>
+                          <div class="col text-danger">
+                              <p *ngIf="campoNoValido('fecha');"> Agregue una fecha</p>
+                          </div>
+                      </div>
+                      <div class="form-group row">
+                          <div class="col-sm-12">
+                              <button type="submit" class="btn btn-primary">Guardar Datos</button>
+                          </div>
+                      </div>
+                  </form>
+              </div>
+          </div>
+        </div>
+      </div>
+  </div>
+</div>

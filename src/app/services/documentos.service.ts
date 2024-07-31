@@ -53,4 +53,14 @@ export class DocumentosService {
       )
   }
 
+  crearDocumento(data: Documentos) {
+    const url = `${base_url}/documentos/`
+    return this.http.post(url, data, this.getheaders())
+  }
+
+  eliminarDocumento(id: string){
+    const url = `${base_url}/documentos/${id}`
+    return this.http.delete(url, this.getheaders())
+  }
+
 }

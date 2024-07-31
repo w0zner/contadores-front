@@ -1,1 +1,26 @@
-<p>archivos works!</p>
+<div class="card">
+  <div class="card-body">
+
+          <h4 class="card-title font-weight-bold">Sección para añadir archivo</h4>
+          <label for="input-file-now">Recuerde solo subir PDF, RAR, ZIP o XML</label>
+          <input type="file" id="input-file-now" class="dropify form-control-file" (change)="cambiarArchivo($event.target)" />
+          <!--  -->
+          <div class="form-group text-center m-t-20">
+              <div class="col-xs-12">
+                  <button class="btn btn-primary btn-md btn-block text-uppercase "
+                      type="button"
+                      [disabled]="file?.size === 0"
+                      (click)="subirArchivo();">Subir Archivo
+                  </button>
+              </div>
+          </div>
+          <hr>
+          <div class="form-group text-center m-t-20">
+              <button class="btn btn-danger btn-md text-center text-uppercase"
+                          type="button"
+                          (click)="regresarADocumentos()">No deseo actualizar el documento
+              </button>
+          </div>
+
+  </div>
+</div>

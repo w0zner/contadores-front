@@ -2,7 +2,7 @@
 <!-- Start Page Content -->
 <!-- ============================================================== -->
 <!-- Row -->
-<div class="row">
+<div class="row animated fadeIn fast">
   <!-- Column -->
   <div class="col-lg-12 col-xlg-12 col-md-7">
       <div class="card">
@@ -13,11 +13,20 @@
                       placeholder="Buscar usuario..."
                       (keyup)="buscar( txtTermino.value )"
                       #txtTermino/>
-
           </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <!-- Column -->
+    <div class="col-lg-12 col-xlg-12 col-md-7">
+        <div class="card">
           <!-- Nav tabs -->
           <ul class="nav nav-tabs profile-tab" role="tablist">
-              <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#profile" role="tab">Datos</a> </li>
+              <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#profile" role="tab">
+                <h4 class="card-title">Lista de usuarios</h4>
+                      <h6 class="card-subtitle"></h6>
+              </a> </li>
           </ul>
           <!-- Tab panes -->
           <div class="tab-content">
@@ -25,9 +34,8 @@
               <div class="tab-pane active" id="profile" role="tabpanel">
 
                   <div class="card-body">
-                      <h4 class="card-title">Historial de documentos</h4>
-                      <h6 class="card-subtitle"></h6>
-                      <div class="table-responsive m-t-40">
+
+                      <div class="table-responsive m-t-10">
                           <table id="example23" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                               <thead>
                                   <tr>
@@ -62,6 +70,9 @@
                                   </tr>
                               </tbody>
                           </table>
+                          <div class="col-12 text-center m-b-20" *ngIf="usuarios.length === 0">
+                            <span>No hay datos que mostrar</span>
+                          </div>
                           <pagination-controls (pageChange)="p = $event"
                           previousLabel="Anterior"
                           nextLabel="Siguiente"></pagination-controls>

@@ -31,7 +31,9 @@
                                   <tr *ngFor="let documento of documentos">
                                       <td>{{documento.nombre}}</td>
                                       <td>{{documento.fecha}}</td>
-                                      <td class="cursor" ><a target="_blank">{{documento.pdf}}</a></td>
+                                      <td class="cursor" >
+                                        <a target="_blank" href="{{documento.documentoURL()}}"  download="{{documento.documentoURL()}}">{{documento.pdf}}</a>
+                                      </td>
                                   </tr>
 
                               </tbody>

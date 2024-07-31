@@ -7,11 +7,14 @@
     <!-- ============================================================== -->
     <header class="topbar">
         <nav class="navbar top-navbar navbar-expand-md navbar-light">
-            <!-- ============================================================== -->
+
             <!-- Logo -->
-            <!-- ============================================================== -->
             <div class="navbar-header">
                 <a class="navbar-brand">
+                  <!-- <span style="display: flex; padding-top: 5px;">
+                    <img src="../../../assets/assets/images/logo-icon.png" alt="Home" />
+                        <h3 style="text-align: center; font-weight: bold;">Contadores</h3>
+                  </span> -->
                     <span>
                         <img src="../../../assets/assets/images/logo-icon.png" alt="homepage" class="dark-logo" />
                         <!-- <img src="../../../assets/assets/images/logo-light-icon.png" alt="homepage" class="light-logo" /> -->
@@ -22,40 +25,30 @@
                     </span>
                 </a>
             </div>
-            <!-- ============================================================== -->
-            <!-- End Logo -->
-            <!-- ============================================================== -->
             <div class="navbar-collapse">
                 <!-- ============================================================== -->
                 <!-- toggle and nav items -->
                 <!-- ============================================================== -->
                 <ul class="navbar-nav mr-auto">
-                    <!-- This is  -->
-
-
                     <li class="nav-item hidden-sm-down"></li>
                 </ul>
                 <!-- ============================================================== -->
                 <!-- User profile and search -->
                 <!-- ============================================================== -->
                 <ul class="navbar-nav my-lg-0">
-                    <!-- ============================================================== -->
-                    <!-- Profile -->
-                    <!-- ============================================================== -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle waves-effect waves-dark font-weight-bold" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{usuarioLogueado.nombre | slice:0:15}}{{(usuarioLogueado.nombre.length>15) ? '...' : ''}}</a>
-                        <div class="dropdown-menu dropdown-menu-right animated fadeInRight">
+                        <div class="dropdown-menu dropdown-menu-right animated fadeIn ">
                             <ul class="dropdown-user">
                                 <li>
                                     <div class="dw-user-box">
                                         <div class="u-text">
                                             <h4>{{usuarioLogueado.nombre}}</h4>
-                                            <p class="text-muted">{{usuarioLogueado.email}}</p></div>
+                                            <p class="text-muted">{{usuarioLogueado.email}}</p>
+                                        </div>
                                     </div>
                                 </li>
                                 <li role="separator" class="divider"></li>
-
-
                                 <li *ngFor="let item of menu">
                                     <a class="has-arrow waves-effect waves-dark" aria-expanded="false" [routerLink]="item.url">
                                         <i [class]="item.icono">
@@ -63,13 +56,11 @@
                                         </i>
                                     </a>
                                 </li>
-
-
 <!--                                 <li>
                                   <a class="cursor" [routerLink]="['/dashboard/documentos/mis-documentos/123']"><i class="mdi mdi-cloud-download"> Mis Documentos</i></a>
                                 </li> -->
                                 <li role="separator" class="divider"></li>
-                                <li><a (click)="logout()" class="cursor" ><i class="fa fa-power-off"></i>Salir</a></li>
+                                <li><a (click)="logout()" class="cursor" ><i class="fa fa-power-off"></i> Salir</a></li>
                             </ul>
                         </div>
                     </li>
@@ -80,44 +71,15 @@
     <!-- ============================================================== mdi-account -->
     <!-- End Topbar header -->
     <!-- ============================================================== -->
-    <!-- ============================================================== -->
-    <!-- Left Sidebar - style you can find in sidebar.scss  -->
-    <!-- ============================================================== -->
-
-    <!-- ============================================================== -->
-    <!-- End Left Sidebar - style you can find in sidebar.scss  -->
-    <!-- ============================================================== -->
-
-    <!-- ============================================================== -->
-    <!-- Page wrapper  -->
-    <!-- ============================================================== -->
     <div class="page-wrapper">
-
         <!-- ============================================================== -->
         <!-- Container fluid  -->
         <!-- ============================================================== -->
         <div class="container-fluid">
-
             <router-outlet></router-outlet>
-
         </div>
-        <!-- ============================================================== -->
-        <!-- End Container fluid  -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- footer -->
-        <!-- ============================================================== -->
         <footer class="footer">
             © 2024 Corporativo de Servicios Contables "Ávalos".
         </footer>
-        <!-- ============================================================== -->
-        <!-- End footer -->
-        <!-- ============================================================== -->
     </div>
-    <!-- ============================================================== -->
-    <!-- End Page wrapper  -->
-    <!-- ============================================================== -->
 </div>
-<!-- ============================================================== -->
-<!-- End Wrapper -->
-<!-- ============================================================== -->

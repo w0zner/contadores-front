@@ -2,18 +2,17 @@
   <div class="col-12">
       <div class="card">
           <div class="card-body">
-
               <input type="text"
                       class="form-control"
                       placeholder="Buscar Factura"
                       #txtTermino
+                      (keyup)="buscar( txtTermino.value )"
                       />
-
           </div>
       </div>
   </div>
 </div>
-<!-- ============================================================== (keyup)="buscar( txtTermino.value )"-->
+<!-- ============================================================== -->
 <!-- Start Page Content -->
 <!-- ============================================================== -->
 <!-- Row -->
@@ -23,17 +22,17 @@
       <div class="card">
           <!-- Nav tabs -->
           <ul class="nav nav-tabs profile-tab" role="tablist">
-              <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#profile" role="tab">Datos</a> </li>
+              <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#profile" role="tab">
+                <h4 class="card-title">Historial de documentos</h4>
+                      <h6 class="card-subtitle"></h6>
+              </a> </li>
           </ul>
           <!-- Tab panes -->
           <div class="tab-content">
               <!--second tab-->
               <div class="tab-pane active" id="profile" role="tabpanel">
-
                   <div class="card-body">
-                      <h4 class="card-title">Historial de documentos</h4>
-                      <h6 class="card-subtitle"></h6>
-                      <div class="table-responsive m-t-40">
+                      <div class="table-responsive m-t-10">
                           <table id="example23" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                               <thead>
                                   <tr>
@@ -45,29 +44,37 @@
                                   </tr>
                               </thead>
                               <tbody>
-                                  <!-- <tr *ngFor="let documento of documentos | paginate: { itemsPerPage: 25, currentPage: p }">
+                                  <tr *ngFor="let documento of documentos | paginate: { itemsPerPage: 25, currentPage: p }">
                                       <td>{{ documento.nombre }}</td>
                                       <td>{{ documento.usuario.nombre }}</td>
                                       <td>{{ documento.fecha }}</td>
-                                      <td class="cursor" ><a target="_blank" href="{{documento.documentoUrl}}" download="{{documento.documentoUrl}}" >{{documento.pdf}}</a></td>
+                                      <td class="cursor" >
+                                        <a target="_blank" href="{{documento.documentoURL()}}"  download="{{documento.documentoURL()}}">
+                                          {{documento.pdf}}
+                                        </a>
+                                      </td>
                                       <td class="text-nowrap text-center">
                                           <a data-toggle="modal" data-target=".example2-modal-lg"
                                               class="cursor"
-                                              (click)="editarDocumento(documento._id)">
+                                              (click)="editarDocumento(documento._id || '')">
                                               <i class="fa fa-pencil text-inverse m-r-10"></i>
                                           </a>
                                           <a data-toggle="tooltip"
                                               data-original-title="Borrar"
                                               class="cursor"
-                                              (click)="eliminarDocumento(documento)">
+                                              (click)="eliminarDocumento(documento._id || '')">
                                               <i class="fa fa-close text-danger"></i>
                                           </a>
                                       </td>
-                                  </tr> -->
-
+                                  </tr>
                               </tbody>
                           </table>
-                          <!-- <pagination-controls (pageChange)="p = $event"></pagination-controls> -->
+                          <div class="col-12 text-center m-b-20" *ngIf="documentos.length === 0">
+                            <span>No hay datos que mostrar</span>
+                          </div>
+                          <pagination-controls (pageChange)="p = $event"
+                          previousLabel="Anterior"
+                          nextLabel="Siguiente"></pagination-controls>
                       </div>
                   </div>
 
@@ -79,7 +86,7 @@
   <!-- Column -->
 </div>
 <!-- Row -->
-<!-- ============================================================== -->
+<!-- ==============================================================  -->
 <!-- End PAge Content -->
 <!-- ============================================================== -->
 
@@ -97,7 +104,7 @@
                               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                           </div>
                           <div class="card">
-                              <form
+                              <form [formGroup]="actualizacionDocumentoForm"
                                  >
                               <div class="card-body">
                                   <div class="form-body">
@@ -109,7 +116,7 @@
                                               </div>
                                               <div class="row">
                                                   <div class="col text-danger">
-                                                      <!-- <p *ngIf="campoNoValido('nombre');"> Agregue un nombre</p> -->
+                                                      <!-- <p *ngIf="campoNoValido('nombre');"> Agregue un nombre</p> formControlName="nombre"-->
                                                   </div>
                                               </div>
                                           </div>
