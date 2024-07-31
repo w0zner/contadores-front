@@ -34,12 +34,16 @@ export class UsuariosComponent implements OnInit{
   }
 
   buscar(termino: string) {
-    this.buscarService.buscarTermino('usuarios', termino).subscribe({
-      next: (resp: any[]) => {
-        console.log("BUSCANDO ",resp)
-        this.usuarios = resp
-      }
-    })
+    if(termino.length > 0) {
+      this.buscarService.buscarTermino('usuarios', termino).subscribe({
+        next: (resp: any[]) => {
+          console.log("BUSCANDO ",resp)
+          this.usuarios = resp
+        }
+      })
+    } else {
+      this.cargarUsuarios()
+    }
   }
 
   cambiarRole(user: Usuarios) {

@@ -42,5 +42,15 @@ export class DocumentosService {
     )
   }
 
+  cargarDocumentosGenerales() {
+    const url = `${base_url}/documentos/`
+    return this.http.get<CargarDocumentos>(url, this.getheaders())
+      .pipe(
+        map((resp)=> {
+          const documentos = resp.documentos.map(doc => new Documentos(doc.nombre, doc.usuario, doc.fecha, doc.pdf, doc._id))
+          return documentos
+        })
+      )
+  }
 
 }
