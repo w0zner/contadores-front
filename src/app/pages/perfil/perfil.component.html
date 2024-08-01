@@ -1,22 +1,12 @@
-<!-- ============================================================== -->
-<!-- Start Page Content -->
-<!-- ============================================================== -->
-<!-- Row -->
 <div class="row">
-  <!-- Column -->
   <div class="col-lg-12 col-xlg-12 col-md-7">
       <div class="card animated fadeIn fast">
-          <!-- Nav tabs -->
           <ul class="nav nav-tabs profile-tab" role="tablist">
               <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#settings" role="tab">
                 <div class="font-weight-normal">Perfil</div>
               </a> </li>
           </ul>
-          <!-- Tab panes -->
           <div class="tab-content">
-              <!--second tab-->
-
-              <!-- Inicio Perfil -->
               <div class="tab-pane active" id="settings" role="tabpanel">
                   <div class="card-body">
                       <form class="form-horizontal form-material" [formGroup]="perfilForm" (ngSubmit)="actualizarPerfil()">
@@ -24,32 +14,28 @@
                               <label class="col-md-12 font-weight-bold">Nombre completo</label>
                               <div class="col-md-12">
                                   <input type="text" placeholder="Nombre completo"  class="form-control form-control-line"
-                                    formControlName="nombre"
-                                  >
+                                    formControlName="nombre">
                               </div>
                           </div>
                           <div class="form-group">
                               <label class="col-md-12 font-weight-bold">Correo electrónico</label>
                               <div class="col-md-12">
                                   <input type="email" placeholder="Email" class="form-control form-control-line" name="example-email" id="example-email"
-                                  formControlName="email"
-                                  >
+                                  formControlName="email">
                               </div>
                           </div>
                           <div class="form-group">
                               <label class="col-md-12 font-weight-bold">CURP</label>
                               <div class="col-md-12">
                                   <input type="text" placeholder="" pattern="[0-9A-Z]*" class="form-control form-control-line"
-                                  formControlName="curp"
-                                  >
+                                  formControlName="curp">
                               </div>
                           </div>
                           <div class="form-group">
                               <label class="col-md-12 font-weight-bold">Telefóno</label>
                               <div class="col-md-12">
                                   <input type="text" placeholder=""  class="form-control form-control-line"
-                                  formControlName="telefono"
-                                  >
+                                  formControlName="telefono">
                               </div>
                           </div>
                           <div class="row mb-3">
@@ -67,14 +53,7 @@
                       </form>
                   </div>
               </div>
-              <!-- Fin Perfil -->
-
           </div>
       </div>
   </div>
-  <!-- Column -->
 </div>
-<!-- Row -->
-<!-- ============================================================== -->
-<!-- End PAge Content -->
-<!-- ============================================================== -->

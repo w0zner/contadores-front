@@ -5,7 +5,6 @@ import { PerfilComponent } from './perfil/perfil.component';
 import { authGuard } from '../guards/auth.guard';
 import { UsuariosComponent } from './usuarios/usuarios.component';
 import { NuevoDocumentoComponent } from './nuevo-documento/nuevo-documento.component';
-import { EditarDocumentoComponent } from './editar-documento/editar-documento.component';
 import { DocumentosComponent } from './documentos/documentos.component';
 import { ArchivosComponent } from './archivos/archivos.component';
 import { MisDocumentosComponent } from './mis-documentos/mis-documentos.component';
@@ -20,7 +19,6 @@ const routes: Routes = [
       //Rutas admin
       {path: 'usuarios', component:UsuariosComponent},
       {path: 'nuevo-documento', component:NuevoDocumentoComponent},
-      {path: 'documentos/editar-documento/:_id', component:EditarDocumentoComponent},
       {path: 'documentos', component:DocumentosComponent},
       {path: 'documentos/:id', component:ArchivosComponent},
       {path: 'documentos/mis-documentos/:id', component:MisDocumentosComponent},

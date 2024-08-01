@@ -47,7 +47,6 @@ export class UsuarioService {
           this.almacenarLocalStorage(resp.token, resp.menu, uid)
 
           this.usuario = new Usuarios(nombre, email, curp, telefono, '', '', role, uid)
-          console.log("Desde refresh ",this.usuario)
 
           return true
         }),

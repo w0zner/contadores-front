@@ -38,7 +38,6 @@ export class FileuploadService {
       return data
 
     } catch (error) {
-      console.log(error)
       return false
     }
   }

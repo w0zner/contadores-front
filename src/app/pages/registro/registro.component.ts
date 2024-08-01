@@ -32,10 +32,8 @@ export class RegistroComponent {
     if(this.registroForm.invalid){
       return;
     }
-    //console.log(this.registroForm.value, this.registroForm.valid)
     this.usuarioService.crearUsuario(this.registroForm.value).subscribe({
       next: (response) => {
-        console.log(response)
         Swal.fire({
           icon: "success",
           title: "Registro exitoso!",

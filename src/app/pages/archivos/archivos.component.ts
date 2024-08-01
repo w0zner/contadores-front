@@ -5,7 +5,6 @@ import Swal from 'sweetalert2'
 declare var JQuery: any;
 declare var $: any;
 
-
 @Component({
   selector: 'app-archivos',
   templateUrl: './archivos.component.html',
@@ -16,14 +15,11 @@ export class ArchivosComponent implements OnInit {
   public file: File | undefined
   public id: string | undefined
 
-  constructor(private activatedRoute: ActivatedRoute, private router: Router, private fileUploadService: FileuploadService) {
-
-  }
+  constructor(private activatedRoute: ActivatedRoute, private router: Router, private fileUploadService: FileuploadService) { }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
       this.id = params['id']
-      console.log(this.id)
     })
     $(document).ready(function() {
       // Basic
@@ -68,16 +64,13 @@ export class ArchivosComponent implements OnInit {
   }
 
   cambiarArchivo(e: any){
-    console.log(e.files[0])
     this.file = e.files[0]
-
   }
 
-  subirArchivo(){
+  subirArchivo() {
     if(this.file) {
       this.fileUploadService.subirArchivo(this.file, 'documentos', this.id || '')
         .then(resp => {
-          console.log(resp)
           Swal.fire({
             title: resp.msg,
             text: "Archivo subido con nombre: " + resp.archivo,
@@ -98,5 +91,4 @@ export class ArchivosComponent implements OnInit {
   regresarADocumentos(){
     this.router.navigateByUrl('/dashboard/documentos')
   }
-
 }

@@ -26,9 +26,7 @@ export class UsuariosComponent implements OnInit{
   cargarUsuarios(){
     this.usuarioService.cargarUsuarios().subscribe({
       next: (resp:any) => {
-
         this.usuarios = resp
-        console.log(this.usuarios)
       }
     })
   }
@@ -37,7 +35,6 @@ export class UsuariosComponent implements OnInit{
     if(termino.length > 0) {
       this.buscarService.buscarTermino('usuarios', termino).subscribe({
         next: (resp: any[]) => {
-          console.log("BUSCANDO ",resp)
           this.usuarios = resp
         }
       })
@@ -55,7 +52,6 @@ export class UsuariosComponent implements OnInit{
         });
       },
       error: (error) => {
-        console.log(error)
         Swal.fire({
           icon: "error",
           title: "Oops...",
@@ -86,7 +82,6 @@ export class UsuariosComponent implements OnInit{
             this.cargarUsuarios()
           },
           error: (error) => {
-            console.log(error)
             Swal.fire({
               icon: "error",
               title: "Oops...",
@@ -97,5 +92,4 @@ export class UsuariosComponent implements OnInit{
       }
     });
   }
-
 }

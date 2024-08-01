@@ -4,9 +4,6 @@ import { Router } from '@angular/router';
 import Swal from 'sweetalert2'
 import { UsuarioService } from 'src/app/services/usuario.service';
 
-//declare var JQuery: any;
-//declare var $: any;
-
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -30,12 +27,8 @@ export class LoginComponent {
       return;
     }
 
-    console.log(this.loginForm.value)
-
     this.usuarioService.login(this.loginForm.value).subscribe({
       next: (response) => {
-        console.log(response)
-
         Swal.fire({
           position: "top",
           icon: "success",

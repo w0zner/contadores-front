@@ -15,7 +15,6 @@ export class MenuService {
     const menuBackend = JSON.parse(localStorage.getItem('menu') ?? '') || []
 
     let menu = menuBackend.map((item: any) => {
-      console.log("ITEM ", item)
       if(item.titulo === 'Mis Documentos') {
         return {
           ...item,
@@ -24,7 +23,6 @@ export class MenuService {
       }
       return item
     })
-    console.log("MENUS ", menu)
     return menu
   }
 }

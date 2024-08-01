@@ -38,10 +38,8 @@ export class DocumentosComponent implements OnInit {
 
   ngOnInit(): void {
     this.subscription = this.router.events.subscribe(event => {
-      console.log(event)
       if (event instanceof NavigationEnd) {
-        // Lógica para recargar los datos o el componente
-        this.reloadComponent();
+        this.reloadComponent(); // Lógica para recargar los datos o el componente
       }
     });
     this.cargarDocumentos()
@@ -50,7 +48,7 @@ export class DocumentosComponent implements OnInit {
 
   reloadComponent() {
     // Lógica de recarga del componente
-    console.log('Componente recargado');
+    console.log('reload');
   }
 
   ngOnDestroy() {
@@ -70,7 +68,6 @@ export class DocumentosComponent implements OnInit {
   cargarDocumentos(){
     this.documentosService.cargarDocumentosGenerales().subscribe({
       next: (resp) => {
-        console.log("Documentos Generales ", resp)
         this.documentos = resp
       }
     })
@@ -80,7 +77,6 @@ export class DocumentosComponent implements OnInit {
     if(termino.length > 0) {
       this.buscarService.buscarTermino('documentos', termino).subscribe({
         next: (resp: any[]) => {
-          console.log("BUSCANDO ",resp)
           this.documentos = resp
         }
       })
@@ -98,9 +94,7 @@ export class DocumentosComponent implements OnInit {
   }
 
   editarDocumento(id: string){
-    console.log(id)
     this.documento = this.documentos.filter(doc => doc._id === id)
-    console.log(this.documento[0].usuario)
     this.usuario = this.documento[0].usuario.nombre
     this.usuarios = this.usuarios.filter(user => user.uid !== this.documento[0].usuario._id)
     this.actualizacionDocumentoForm.patchValue({
@@ -109,7 +103,6 @@ export class DocumentosComponent implements OnInit {
       //usuario: new Usuarios(this.documento[0].usuario.nombre, '', '', '', '', '', 'USER_ROLE', this.documento[0].usuario._id)
     })
     this.actualizacionDocumentoForm.get('usuario')?.setValue(this.documento[0].usuario);
-    console.log(this.actualizacionDocumentoForm.value)
   }
 
   actualizarDocumento() {
@@ -119,14 +112,12 @@ export class DocumentosComponent implements OnInit {
       return;
     }
 
-    console.log(this.documento[0])
     let doc: Documentos = this.documento[0]
     doc.nombre = this.actualizacionDocumentoForm.get('nombre')?.value
     doc.fecha = this.actualizacionDocumentoForm.get('fecha')?.value
-    doc.usuario = this.actualizacionDocumentoForm.get('usuario')?.value
+    //doc.usuario = this.actualizacionDocumentoForm.get('usuario')?.value
     this.documentosService.editarDocumento(doc).subscribe({
       next: (resp) => {
-        console.log(resp)
         Swal.fire({
           text: "Documento actualizado exitosamente!",
           icon: "success"
@@ -191,7 +182,5 @@ export class DocumentosComponent implements OnInit {
     } else {
       this.cambioDeUsuario = false
     }
-
-    console.log(this.cambioDeUsuario)
   }
 }

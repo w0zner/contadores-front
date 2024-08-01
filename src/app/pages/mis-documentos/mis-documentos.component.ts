@@ -26,7 +26,6 @@ export class MisDocumentosComponent implements OnInit{
     this.cargando = true
     this.documentosService.cargarMisDocumentos(id).subscribe(resp => {
       this.documentos = resp
-      console.log(this.documentos)
       this.cargando = false
     })
   }

@@ -25,21 +25,9 @@ export class PerfilComponent implements OnInit {
       telefono: [this.usuario.telefono, Validators.required],
       role: [this.usuario.role, Validators.required]
      })
-
-     console.log(this.usuario)
   }
 
   ngOnInit(): void {
-/*     this.buscarService.buscar('usuarios', 'rodrigo').subscribe({
-      next: (resp) => {
-        console.log("BUSCAR ",resp)
-      }
-    }) */
-    /* this.documentosService.cargarMisDocumentos('66a79c7de64ed928663bdb2b').subscribe({
-      next: resp => {
-        console.log(resp)
-      },
-    }) */
   }
 
   verificarForm():boolean{
@@ -68,14 +56,8 @@ export class PerfilComponent implements OnInit {
       cancelButtonText: "Cancelar"
     }).then((result) => {
       if (result.isConfirmed) {
-        console.log("Actualizando...")
-        console.log(this.perfilForm)
-
-
-
         this.usuarioService.actualizarUsuario(this.usuario.uid, this.perfilForm.value).subscribe({
           next: (resp: any) => {
-            console.log("Actualizado ",resp)
             Swal.fire({
               title: "Registro Actualizado",
               text: resp.msg,
@@ -83,7 +65,6 @@ export class PerfilComponent implements OnInit {
             });
           },
           error: (error) => {
-            console.log(error)
             Swal.fire({
               icon: "error",
               title: "Oops...",
@@ -93,8 +74,6 @@ export class PerfilComponent implements OnInit {
         })
       }
     });
-
-
   }
 
 }

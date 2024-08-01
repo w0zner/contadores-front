@@ -7,7 +7,6 @@ import { PagesRoutingModule } from './pages.routing';
 import { PerfilComponent } from './perfil/perfil.component';
 import { UsuariosComponent } from './usuarios/usuarios.component';
 import { NuevoDocumentoComponent } from './nuevo-documento/nuevo-documento.component';
-import { EditarDocumentoComponent } from './editar-documento/editar-documento.component';
 import { DocumentosComponent } from './documentos/documentos.component';
 import { ArchivosComponent } from './archivos/archivos.component';
 import { MisDocumentosComponent } from './mis-documentos/mis-documentos.component';
@@ -17,7 +16,7 @@ import { EmptyComponent } from './empty/empty.component';
 
 
 @NgModule({
-  declarations: [PagesComponent, PerfilComponent, UsuariosComponent, NuevoDocumentoComponent, EditarDocumentoComponent, DocumentosComponent, ArchivosComponent, MisDocumentosComponent, EmptyComponent],
+  declarations: [PagesComponent, PerfilComponent, UsuariosComponent, NuevoDocumentoComponent, DocumentosComponent, ArchivosComponent, MisDocumentosComponent, EmptyComponent],
   imports: [
     CommonModule,
     RouterModule,
@@ -27,7 +26,7 @@ import { EmptyComponent } from './empty/empty.component';
     ReactiveFormsModule
   ],
   exports: [
-    PagesComponent, PerfilComponent, UsuariosComponent, NuevoDocumentoComponent, EditarDocumentoComponent, DocumentosComponent, ArchivosComponent, MisDocumentosComponent
+    PagesComponent, PerfilComponent, UsuariosComponent, NuevoDocumentoComponent, DocumentosComponent, ArchivosComponent, MisDocumentosComponent
   ]
 })
 export class PagesModule { }

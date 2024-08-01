@@ -53,7 +53,6 @@ export class NuevoDocumentoComponent implements OnInit {
 
     this.documentosService.crearDocumento(this.nuevoDocumentoForm.value).subscribe({
       next: (resp:any) => {
-        console.log("Crear Doc ",resp)
         Swal.fire({
           text: "Datos Guardados",
           icon: "success",
@@ -64,5 +63,4 @@ export class NuevoDocumentoComponent implements OnInit {
       }
     })
   }
-
 }

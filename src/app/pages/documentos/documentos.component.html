@@ -2,99 +2,73 @@
   <div class="col-12">
       <div class="card">
           <div class="card-body">
-              <input type="text"
-                      class="form-control"
-                      placeholder="Buscar Factura"
-                      #txtTermino
-                      (keyup)="buscar( txtTermino.value )"
-                      />
+              <input type="text" class="form-control" placeholder="Buscar Factura"
+                      #txtTermino (keyup)="buscar( txtTermino.value )" />
           </div>
       </div>
   </div>
 </div>
-<!-- ============================================================== -->
-<!-- Start Page Content -->
-<!-- ============================================================== -->
-<!-- Row -->
+
+
 <div class="row">
-  <!-- Column -->
   <div class="col-lg-12 col-xlg-12 col-md-7">
       <div class="card">
-          <!-- Nav tabs -->
+
           <ul class="nav nav-tabs profile-tab" role="tablist">
               <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#profile" role="tab">
                 <div class="font-weight-normal">Historial de documentos</div>
               </a> </li>
           </ul>
-          <!-- Tab panes -->
+
           <div class="tab-content">
-              <!--second tab-->
-              <div class="tab-pane active" id="profile" role="tabpanel">
-                  <div class="card-body">
-                      <div class="table-responsive m-t-10">
-                          <table id="example23" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
-                              <thead>
-                                  <tr>
-                                      <th>Nombre</th>
-                                      <th>Usuario</th>
-                                      <th>Fecha</th>
-                                      <th>Descargar</th>
-                                      <th>Acciones</th>
-                                  </tr>
-                              </thead>
-                              <tbody>
-                                  <tr *ngFor="let documento of documentos | paginate: { itemsPerPage: 25, currentPage: p }">
-                                      <td>{{ documento.nombre }}</td>
-                                      <td>{{ documento.usuario.nombre }}</td>
-                                      <td>{{ documento.fecha }}</td>
-                                      <td class="cursor" >
-                                        <a target="_blank" href="{{documento.documentoURL()}}"  download="{{documento.documentoURL()}}">
-                                          {{documento.pdf}}
+            <div class="tab-pane active" id="profile" role="tabpanel">
+                <div class="card-body">
+                    <div class="table-responsive m-t-10">
+                        <table id="example23" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Usuario</th>
+                                    <th>Fecha</th>
+                                    <th>Descargar</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let documento of documentos | paginate: { itemsPerPage: 25, currentPage: p }">
+                                    <td>{{ documento.nombre }}</td>
+                                    <td>{{ documento.usuario.nombre }}</td>
+                                    <td>{{ documento.fecha }}</td>
+                                    <td class="cursor">
+                                        <a target="_blank" href="{{documento.documentoURL()}}" download="{{documento.documentoURL()}}">
+                                            {{documento.pdf}}
                                         </a>
-                                      </td>
-                                      <td class="text-nowrap text-center">
-                                          <a data-toggle="modal" data-target=".example2-modal-lg"
-                                              class="cursor"
-                                              (click)="editarDocumento(documento._id || '')">
-                                              <i class="fa fa-pencil text-inverse m-r-10"></i>
-                                          </a>
-                                          <a data-toggle="tooltip"
-                                              data-original-title="Borrar"
-                                              class="cursor"
-                                              (click)="eliminarDocumento(documento._id || '')">
-                                              <i class="fa fa-close text-danger"></i>
-                                          </a>
-                                          <a data-toggle="tooltip"
-                                              data-original-title="archivo"
-                                              class="cursor"
-                                              (click)="editarArchivo(documento._id || '')"
-                                              style="padding-left: 10px;">
-                                              <i class="fa fa-file-o"></i>
-                                          </a>
-                                      </td>
-                                  </tr>
-                              </tbody>
-                          </table>
-                          <div class="col-12 text-center m-b-20" *ngIf="documentos.length === 0">
+                                    </td>
+                                    <td class="text-nowrap text-center">
+                                        <a data-toggle="modal" data-target=".example2-modal-lg" class="cursor" (click)="editarDocumento(documento._id || '')">
+                                            <i class="fa fa-pencil text-inverse m-r-10"></i>
+                                        </a>
+                                        <a data-toggle="tooltip" data-original-title="Borrar" class="cursor" (click)="eliminarDocumento(documento._id || '')">
+                                            <i class="fa fa-close text-danger"></i>
+                                        </a>
+                                        <a data-toggle="tooltip" data-original-title="archivo" class="cursor" (click)="editarArchivo(documento._id || '')" style="padding-left: 10px;">
+                                            <i class="fa fa-file-o"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="col-12 text-center m-b-20" *ngIf="documentos.length === 0">
                             <span>No hay datos que mostrar</span>
-                          </div>
-                          <pagination-controls (pageChange)="p = $event"
-                          previousLabel="Anterior"
-                          nextLabel="Siguiente"></pagination-controls>
-                      </div>
-                  </div>
-
-              </div>
-
-          </div>
+                        </div>
+                        <pagination-controls (pageChange)="p = $event" previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
       </div>
   </div>
-  <!-- Column -->
 </div>
-<!-- Row -->
-<!-- ==============================================================  -->
-<!-- End PAge Content -->
-<!-- ============================================================== -->
 
 
 <div class="row">
@@ -136,7 +110,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row p-t-2">
+                                   <!--  <div class="row p-t-2">
                                       <div class="col-md-6">
                                           <div class="form-group">
                                             <div class="input-group is-invalid">
@@ -147,15 +121,13 @@
                                             </div>
                                                 <input class="form-control" type="text"  [value]="usuario" disabled *ngIf="!cambioDeUsuario">
 
-
-
                                               <select class="form-control" formControlName="usuario" *ngIf="cambioDeUsuario">
                                                 <option></option>
                                                 <option *ngFor="let usuario of usuarios" value="{{usuario.uid}}">{{ usuario.nombre }} - {{ usuario.email}} </option>
                                               </select>
                                           </div>
                                       </div>
-                                  </div>
+                                  </div> -->
                                       <div class="form-actions">
                                           <button  class="btn btn-success"> <i class="fa fa-check" ></i> Guardar </button>
                                       </div>
@@ -164,11 +136,8 @@
                               </form>
                       </div>
                   </div>
-                  <!-- /.modal-content -->
               </div>
-              <!-- /.modal-dialog -->
           </div>
-          <!-- /.modal -->
       </div>
   </div>
   </div>
