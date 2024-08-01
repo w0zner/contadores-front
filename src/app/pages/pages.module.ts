@@ -12,11 +12,12 @@ import { DocumentosComponent } from './documentos/documentos.component';
 import { ArchivosComponent } from './archivos/archivos.component';
 import { MisDocumentosComponent } from './mis-documentos/mis-documentos.component';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { EmptyComponent } from './empty/empty.component';
 
 
 
 @NgModule({
-  declarations: [PagesComponent, PerfilComponent, UsuariosComponent, NuevoDocumentoComponent, EditarDocumentoComponent, DocumentosComponent, ArchivosComponent, MisDocumentosComponent],
+  declarations: [PagesComponent, PerfilComponent, UsuariosComponent, NuevoDocumentoComponent, EditarDocumentoComponent, DocumentosComponent, ArchivosComponent, MisDocumentosComponent, EmptyComponent],
   imports: [
     CommonModule,
     RouterModule,

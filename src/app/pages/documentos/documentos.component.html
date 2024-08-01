@@ -65,6 +65,13 @@
                                               (click)="eliminarDocumento(documento._id || '')">
                                               <i class="fa fa-close text-danger"></i>
                                           </a>
+                                          <a data-toggle="tooltip"
+                                              data-original-title="archivo"
+                                              class="cursor"
+                                              (click)="editarArchivo(documento._id || '')"
+                                              style="padding-left: 10px;">
+                                              <i class="fa fa-file-o"></i>
+                                          </a>
                                       </td>
                                   </tr>
                               </tbody>
@@ -104,7 +111,8 @@
                               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                           </div>
                           <div class="card">
-                              <form [formGroup]="actualizacionDocumentoForm"
+                              <form [formGroup]="actualizacionDocumentoForm" 
+                              (submit)="actualizarDocumento()"
                                  >
                               <div class="card-body">
                                   <div class="form-body">

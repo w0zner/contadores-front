@@ -50,7 +50,6 @@ export class UsuariosComponent implements OnInit{
     this.usuarioService.updateRoleUser(user).subscribe({
       next: (resp: any) => {
         Swal.fire({
-
           text: resp.msg,
           icon: "success"
         });

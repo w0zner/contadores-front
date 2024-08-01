@@ -17,11 +17,9 @@
                   </span> -->
                     <span>
                         <img src="../../../assets/assets/images/logo-icon.png" alt="homepage" class="dark-logo" />
-                        <!-- <img src="../../../assets/assets/images/logo-light-icon.png" alt="homepage" class="light-logo" /> -->
                     </span>
                     <span>
-                          <img src="../../../assets/assets/images/logo-text.png" alt="homepage" class="dark-logo" />
-                          <!-- <img src="../../../assets/assets/images/logo-light-text.png" class="light-logo" alt="homepage" /> -->
+                          <!-- <img src="../../../assets/assets/images/logo-text.png" alt="homepage" class="dark-logo" /> -->
                     </span>
                 </a>
             </div>
@@ -37,13 +35,13 @@
                 <!-- ============================================================== -->
                 <ul class="navbar-nav my-lg-0">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle waves-effect waves-dark font-weight-bold" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{usuarioLogueado.nombre | slice:0:15}}{{(usuarioLogueado.nombre.length>15) ? '...' : ''}}</a>
+                        <a class="nav-link dropdown-toggle waves-effect waves-dark font-weight-bold"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{usuarioLogueado.nombre | slice:0:15}}{{(usuarioLogueado.nombre.length>15) ? '...' : ''}}</a>
                         <div class="dropdown-menu dropdown-menu-right animated fadeIn ">
                             <ul class="dropdown-user">
                                 <li>
                                     <div class="dw-user-box">
                                         <div class="u-text">
-                                            <h4>{{usuarioLogueado.nombre}}</h4>
+                                            <h4 class="font-weight-bold">{{usuarioLogueado.nombre}}</h4>
                                             <p class="text-muted">{{usuarioLogueado.email}}</p>
                                         </div>
                                     </div>

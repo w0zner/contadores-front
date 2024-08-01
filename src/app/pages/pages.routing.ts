@@ -9,6 +9,7 @@ import { EditarDocumentoComponent } from './editar-documento/editar-documento.co
 import { DocumentosComponent } from './documentos/documentos.component';
 import { ArchivosComponent } from './archivos/archivos.component';
 import { MisDocumentosComponent } from './mis-documentos/mis-documentos.component';
+import { EmptyComponent } from './empty/empty.component';
 
 
 const routes: Routes = [
@@ -23,6 +24,7 @@ const routes: Routes = [
       {path: 'documentos', component:DocumentosComponent},
       {path: 'documentos/:id', component:ArchivosComponent},
       {path: 'documentos/mis-documentos/:id', component:MisDocumentosComponent},
+      { path: 'temporary-route', component: EmptyComponent }  // Ruta temporal
     ]}
 ];
 

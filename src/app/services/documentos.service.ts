@@ -63,4 +63,12 @@ export class DocumentosService {
     return this.http.delete(url, this.getheaders())
   }
 
+  editarDocumento(datos: Documentos) {
+    const url = `${base_url}/documentos/editar-documento/${datos._id}`
+    return this.http.put(url, datos, this.getheaders())
+      .pipe(
+        map((resp:any) => resp.documento)
+      )
+  }
+
 }
