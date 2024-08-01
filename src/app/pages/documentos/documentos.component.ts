@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Documentos } from 'src/app/models/documentos.model';
+import { Usuarios } from 'src/app/models/usuarios.model';
 import { BuscarService } from 'src/app/services/buscar.service';
 import { DocumentosService } from 'src/app/services/documentos.service';
+import { UsuarioService } from 'src/app/services/usuario.service';
 import Swal from 'sweetalert2'
 
 @Component({
@@ -14,16 +16,23 @@ import Swal from 'sweetalert2'
 })
 export class DocumentosComponent implements OnInit {
 
+  @ViewChild('fileInput') fileInput:ElementRef | undefined;
   public actualizacionDocumentoForm: FormGroup
   public documentos: Documentos[] = []
+  public usuarios: Usuarios[] = []
   public documento: any
+  public usuario: any
+  public cambioDeUsuario: boolean = false
+  formSubmit = false
   private subscription: Subscription | undefined;
 
   p: number = 1;
 
-  constructor(private buscarService: BuscarService, private documentosService: DocumentosService, private fb: FormBuilder, private router: Router) {
+  constructor(private buscarService: BuscarService, private documentosService: DocumentosService, private fb: FormBuilder, private router: Router, private usuariosService: UsuarioService) {
     this.actualizacionDocumentoForm = fb.group({
-      nombre: ['', Validators.required]
+      nombre: ['', Validators.required],
+      fecha: [''],
+      usuario: [null]
     })
   }
 
@@ -36,6 +45,7 @@ export class DocumentosComponent implements OnInit {
       }
     });
     this.cargarDocumentos()
+    this.cargarUsusarios()
   }
 
   reloadComponent() {
@@ -47,6 +57,14 @@ export class DocumentosComponent implements OnInit {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+  }
+
+  cargarUsusarios() {
+    this.usuariosService.cargarUsuarios().subscribe({
+      next: (resp) => {
+        this.usuarios = resp
+      }
+    })
   }
 
   cargarDocumentos(){
@@ -71,19 +89,41 @@ export class DocumentosComponent implements OnInit {
     }
   }
 
+  campoNoValido(campo: string):boolean {
+    if(this.actualizacionDocumentoForm.get(campo)?.invalid && this.formSubmit) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   editarDocumento(id: string){
     console.log(id)
     this.documento = this.documentos.filter(doc => doc._id === id)
-    console.log(this.documento[0])
+    console.log(this.documento[0].usuario)
+    this.usuario = this.documento[0].usuario.nombre
+    this.usuarios = this.usuarios.filter(user => user.uid !== this.documento[0].usuario._id)
     this.actualizacionDocumentoForm.patchValue({
-      nombre: this.documento[0].nombre
+      nombre: this.documento[0].nombre,
+      fecha: this.documento[0].fecha,
+      //usuario: new Usuarios(this.documento[0].usuario.nombre, '', '', '', '', '', 'USER_ROLE', this.documento[0].usuario._id)
     })
+    this.actualizacionDocumentoForm.get('usuario')?.setValue(this.documento[0].usuario);
+    console.log(this.actualizacionDocumentoForm.value)
   }
 
   actualizarDocumento() {
+    this.formSubmit = true
+
+    if(this.actualizacionDocumentoForm.invalid){
+      return;
+    }
+
     console.log(this.documento[0])
     let doc: Documentos = this.documento[0]
     doc.nombre = this.actualizacionDocumentoForm.get('nombre')?.value
+    doc.fecha = this.actualizacionDocumentoForm.get('fecha')?.value
+    doc.usuario = this.actualizacionDocumentoForm.get('usuario')?.value
     this.documentosService.editarDocumento(doc).subscribe({
       next: (resp) => {
         console.log(resp)
@@ -91,11 +131,11 @@ export class DocumentosComponent implements OnInit {
           text: "Documento actualizado exitosamente!",
           icon: "success"
         });
-        
+        this.fileInput?.nativeElement.click();
         this.router.navigate(['/dashboard/temporary-route'], { skipLocationChange: true }).then(() => {
           this.router.navigateByUrl(`/dashboard/documentos`);
         });
-      }, 
+      },
       error: (error) => {
         Swal.fire({
           icon: "error",
@@ -143,5 +183,15 @@ export class DocumentosComponent implements OnInit {
         })
       }
     });
+  }
+
+  cambiarUsuario() {
+    if(this.cambioDeUsuario===false) {
+      this.cambioDeUsuario = true
+    } else {
+      this.cambioDeUsuario = false
+    }
+
+    console.log(this.cambioDeUsuario)
   }
 }

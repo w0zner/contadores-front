@@ -23,8 +23,7 @@
           <!-- Nav tabs -->
           <ul class="nav nav-tabs profile-tab" role="tablist">
               <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#profile" role="tab">
-                <h4 class="card-title">Historial de documentos</h4>
-                      <h6 class="card-subtitle"></h6>
+                <div class="font-weight-normal">Historial de documentos</div>
               </a> </li>
           </ul>
           <!-- Tab panes -->
@@ -107,11 +106,11 @@
                   <div class="modal-dialog modal-lg">
                       <div class="modal-content">
                           <div class="modal-header">
-                              <h4 class="modal-title" id="myLargeModalLabel">Modificar datos del paciente</h4>
-                              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                              <h4 class="modal-title" id="myLargeModalLabel">Modificar datos del documento</h4>
+                              <button type="button" class="close" #fileInput data-dismiss="modal" aria-hidden="true">×</button>
                           </div>
                           <div class="card">
-                              <form [formGroup]="actualizacionDocumentoForm" 
+                              <form [formGroup]="actualizacionDocumentoForm"
                               (submit)="actualizarDocumento()"
                                  >
                               <div class="card-body">
@@ -124,16 +123,39 @@
                                               </div>
                                               <div class="row">
                                                   <div class="col text-danger">
-                                                      <!-- <p *ngIf="campoNoValido('nombre');"> Agregue un nombre</p> formControlName="nombre"-->
+                                                      <p *ngIf="campoNoValido('nombre');"> Agregue un nombre</p>
                                                   </div>
                                               </div>
                                           </div>
-                                          <!--/span    [formGroup]="docForm"   -->
-
-                                          <!--/span (click)="actualizarDocumento();"-->
-
-                                      <!--/row-->
                                       </div>
+                                      <div class="row p-t-2">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label">Fecha</label>
+                                                <input class="form-control" type="date"  id="example-date-input" formControlName="fecha">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row p-t-2">
+                                      <div class="col-md-6">
+                                          <div class="form-group">
+                                            <div class="input-group is-invalid">
+                                              <label class="control-label">Usuario</label>
+                                              <div class="input-group-append">
+                                                <button class="btn btn-secondary btn btn-sm m-l-5 m-b-5" (click)="cambiarUsuario()" type="button"><i class="mdi mdi-rotate-3d"></i></button>
+                                              </div>
+                                            </div>
+                                                <input class="form-control" type="text"  [value]="usuario" disabled *ngIf="!cambioDeUsuario">
+
+
+
+                                              <select class="form-control" formControlName="usuario" *ngIf="cambioDeUsuario">
+                                                <option></option>
+                                                <option *ngFor="let usuario of usuarios" value="{{usuario.uid}}">{{ usuario.nombre }} - {{ usuario.email}} </option>
+                                              </select>
+                                          </div>
+                                      </div>
+                                  </div>
                                       <div class="form-actions">
                                           <button  class="btn btn-success"> <i class="fa fa-check" ></i> Guardar </button>
                                       </div>
