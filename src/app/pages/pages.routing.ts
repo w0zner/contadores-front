@@ -9,6 +9,7 @@ import { DocumentosComponent } from './documentos/documentos.component';
 import { ArchivosComponent } from './archivos/archivos.component';
 import { MisDocumentosComponent } from './mis-documentos/mis-documentos.component';
 import { EmptyComponent } from './empty/empty.component';
+import { adminGuard } from '../guards/admin.guard';
 
 
 const routes: Routes = [
@@ -17,7 +18,7 @@ const routes: Routes = [
       {path: 'perfil', component: PerfilComponent},
 
       //Rutas admin
-      {path: 'usuarios', component:UsuariosComponent},
+      {path: 'usuarios', component:UsuariosComponent, canActivate: [adminGuard],},
       {path: 'nuevo-documento', component:NuevoDocumentoComponent},
       {path: 'documentos', component:DocumentosComponent},
       {path: 'documentos/:id', component:ArchivosComponent},

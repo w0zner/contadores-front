@@ -12,6 +12,7 @@ import Swal from 'sweetalert2'
 export class UsuariosComponent implements OnInit{
 
   public usuarios: Usuarios[] = []
+  public userLogged: string = ''
 
   p: number = 1;
 
@@ -20,6 +21,7 @@ export class UsuariosComponent implements OnInit{
   }
 
   ngOnInit(): void {
+    this.userLogged = this.usuarioService.getUserLogged()
     this.cargarUsuarios()
   }
 
@@ -27,6 +29,7 @@ export class UsuariosComponent implements OnInit{
     this.usuarioService.cargarUsuarios().subscribe({
       next: (resp:any) => {
         this.usuarios = resp
+        console.log(resp)
       }
     })
   }
@@ -43,8 +46,8 @@ export class UsuariosComponent implements OnInit{
     }
   }
 
-  cambiarRole(user: Usuarios) {
-    this.usuarioService.updateRoleUser(user).subscribe({
+  actualizarUsuario(user: Usuarios) {
+    this.usuarioService.updateUser(user).subscribe({
       next: (resp: any) => {
         Swal.fire({
           text: resp.msg,

@@ -42,7 +42,7 @@ export class BuscarService {
 
   private obtenerUsuarios(resultados: any[]): Usuarios[] {
     return resultados.map(
-      user => new Usuarios(user.nombre, user.email, user.curp, user.telefono, '', '', user.role, user.uid)
+      user => new Usuarios(user.nombre, user.email, user.curp, user.telefono, user.estado, '', '', user.role, user.uid)
     )
   }
 

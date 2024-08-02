@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FileuploadService } from 'src/app/services/fileupload.service';
+import { UsuarioService } from 'src/app/services/usuario.service';
 import Swal from 'sweetalert2'
 declare var JQuery: any;
 declare var $: any;
@@ -14,10 +15,12 @@ export class ArchivosComponent implements OnInit {
 
   public file: File | undefined
   public id: string | undefined
+  public userLogged: string = ''
 
-  constructor(private activatedRoute: ActivatedRoute, private router: Router, private fileUploadService: FileuploadService) { }
+  constructor(private activatedRoute: ActivatedRoute, private router: Router, private fileUploadService: FileuploadService, private usuariosService: UsuarioService) { }
 
   ngOnInit(): void {
+    this.userLogged = this.usuariosService.getUserLogged()
     this.activatedRoute.params.subscribe(params => {
       this.id = params['id']
     })
@@ -76,7 +79,7 @@ export class ArchivosComponent implements OnInit {
             text: "Archivo subido con nombre: " + resp.archivo,
             icon: "success"
           });
-          this.router.navigateByUrl(`/dashboard/documentos`)
+          this.router.navigateByUrl(`/dashboard/documentos/mis-documentos/${this.userLogged}`)
         })
         .catch(error => {
           Swal.fire({
@@ -89,6 +92,6 @@ export class ArchivosComponent implements OnInit {
   }
 
   regresarADocumentos(){
-    this.router.navigateByUrl('/dashboard/documentos')
+    this.router.navigateByUrl(`/dashboard/documentos/mis-documentos/${this.userLogged}`)
   }
 }

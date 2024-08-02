@@ -28,6 +28,7 @@
                                   <tr>
                                       <th>Nombre</th>
                                       <th>correo</th>
+                                      <th>Estado</th>
                                       <th>Role</th>
                                       <th>Acciones</th>
                                   </tr>
@@ -37,13 +38,19 @@
                                       <td>{{user.nombre}}</td>
                                       <td>{{user.email}}</td>
                                       <td>
-                                          <select class="form-control" [(ngModel)]="user.role" (change)="cambiarRole(user)">
+                                        <div class="form-check form-switch">
+                                          <input class="form-check-input" type="checkbox" role="switch" id="check{{user.uid}}" [(ngModel)]="user.estado" (change)="actualizarUsuario(user)" disabled="{{userLogged===user.uid}}">
+                                          <label class="form-check-label" for="check{{user.uid}}">{{user.estado===true?'Activo':'Inactivo'}}</label>
+                                        </div>
+                                      </td>
+                                      <td>
+                                          <select class="form-control" [(ngModel)]="user.role" (change)="actualizarUsuario(user)">
                                               <option value="ADMIN_ROLE">Admin</option>
                                               <option value="USER_ROLE">User</option>
                                           </select>
                                       </td>
-                                      <td class="text-nowrap text-center">
-                                          <a data-toggle="tooltip" data-original-title="Borrar" class="cursor" (click)="eliminarUsuario(user.uid || '')">
+                                      <td class="text-nowrap text-center" >
+                                          <a data-toggle="tooltip" data-original-title="Borrar" class="cursor" (click)="eliminarUsuario(user.uid || '')"  *ngIf="userLogged!==user.uid">
                                               <i class="fa fa-close text-danger"></i>
                                           </a>
                                       </td>

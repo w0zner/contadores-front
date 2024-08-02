@@ -11,6 +11,7 @@ export const authGuard: CanActivateFn = (route, state) => {
   return usuarioService.refreshToken()
   .pipe(
     tap(isLogged => {
+      console.log("guard", isLogged)
       if(!isLogged) {
         router.navigateByUrl('/login')
       }

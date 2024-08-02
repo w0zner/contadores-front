@@ -42,11 +42,11 @@ export class UsuarioService {
     return this.http.get(`${base_url}/login/refreshToken`,
       {headers: {'x-token': this.getToken()}}).pipe(
         map((resp: any) => {
-          const {nombre, email, curp, telefono, password, password2, role, uid} = resp.usuario
+          const {nombre, email, curp, telefono, estado, password, password2, role, uid} = resp.usuario
 
           this.almacenarLocalStorage(resp.token, resp.menu, uid)
 
-          this.usuario = new Usuarios(nombre, email, curp, telefono, '', '', role, uid)
+          this.usuario = new Usuarios(nombre, email, curp, telefono, estado, '', '', role, uid)
 
           return true
         }),
@@ -77,7 +77,7 @@ export class UsuarioService {
     }
   }
 
-  actualizarUsuario(id: string, data: {nombre: string, email: string, curp: string, telefono: string, role: 'ADMIN_ROLE' | 'USER_ROLE'}) {
+  actualizarUsuario(id: string, data: {nombre: string, email: string, curp: string, telefono: string, estado: boolean, role: 'ADMIN_ROLE' | 'USER_ROLE'}) {
     return this.http.put(`${base_url}/usuarios/${id}`, data, this.getheaders())
   }
 
@@ -85,14 +85,14 @@ export class UsuarioService {
     return this.http.get<CargarUsuarios>(`${base_url}/usuarios/`, this.getheaders())
         .pipe(
           map((resp) => {
-            const usuarios = resp.usuarios.map(user => new Usuarios(user.nombre, user.email, user.curp, user.telefono, '', '', user.role, user.uid))
-
+            const usuarios = resp.usuarios.map(user => new Usuarios(user.nombre, user.email, user.curp, user.telefono, user.estado, '', '', user.role, user.uid))
+            console.log(resp)
             return usuarios
           })
         )
   }
 
-  updateRoleUser(usuario: Usuarios) {
+  updateUser(usuario: Usuarios) {
     return this.http.put(`${base_url}/usuarios/${usuario.uid}`, usuario, this.getheaders())
   }
 
