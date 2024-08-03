@@ -27,19 +27,27 @@
                                       <th>Nombre</th>
                                       <th>Usuario</th>
                                       <th>Fecha</th>
+                                      <th>Tipo</th>
+                                      <th>Estado</th>
                                       <th>Archivo</th>
                                       <th>Acciones</th>
                                   </tr>
                               </thead>
                               <tbody>
-                                  <tr *ngFor="let documento of documentos">
+                                  <tr *ngFor="let documento of documentos | paginate: { itemsPerPage: 5, currentPage: p }">
                                       <td>{{documento.nombre}}</td>
                                       <td>{{documento.usuario.nombre}}</td>
                                       <td>{{documento.fecha}}</td>
+                                      
+                                      <td><span class="badge" [ngClass]="{
+                                        'badge-info': documento.tipo === 'FACTURA',
+                                        'badge-warning': documento.tipo === 'INFORME'
+                                      }" style="padding: 2px; border-radius: 3px;">{{documento.tipo}}</span></td>
+                                      <td>{{documento.estado}}</td>
                                       <td class="cursor">
                                           <a target="_blank" href="{{documento.documentoURL()}}" download="{{documento.documentoURL()}}">{{documento.pdf}}</a>
                                       </td>
-                                      <td class="text-nowrap text-center">
+                                      <td class="text-nowrap text-center" *ngIf="documento.tipo !== 'INFORME'">
                                         <a data-toggle="modal" data-target=".example2-modal-lg" class="cursor" (click)="editarDocumento(documento._id || '')">
                                             <i class="fa fa-pencil text-inverse m-r-10"></i>
                                         </a>
@@ -55,7 +63,8 @@
                           </table>
                           <div class="col-12 text-center m-b-20" *ngIf="documentos.length === 0">
                             <span>No hay datos que mostrar</span>
-                        </div>
+                          </div>
+                          <pagination-controls (pageChange)="p = $event" previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
                       </div>
                   </div>
               </div>

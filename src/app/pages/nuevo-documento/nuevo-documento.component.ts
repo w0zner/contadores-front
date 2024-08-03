@@ -21,7 +21,8 @@ export class NuevoDocumentoComponent implements OnInit {
     this.nuevoDocumentoForm= this.fb.group({
       nombre: ['', Validators.required],
       usuario: ['', Validators.required],
-      fecha: ['', Validators.required]
+      fecha: ['', Validators.required],
+      tipo: ['INFORME']
     })
   }
 

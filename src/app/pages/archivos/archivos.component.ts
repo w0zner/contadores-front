@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { DocumentosService } from 'src/app/services/documentos.service';
 import { FileuploadService } from 'src/app/services/fileupload.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import Swal from 'sweetalert2'
@@ -17,7 +18,7 @@ export class ArchivosComponent implements OnInit {
   public id: string | undefined
   public userLogged: string = ''
 
-  constructor(private activatedRoute: ActivatedRoute, private router: Router, private fileUploadService: FileuploadService, private usuariosService: UsuarioService) { }
+  constructor(private activatedRoute: ActivatedRoute, private router: Router, private fileUploadService: FileuploadService, private usuariosService: UsuarioService, private documentosService: DocumentosService) { }
 
   ngOnInit(): void {
     this.userLogged = this.usuariosService.getUserLogged()

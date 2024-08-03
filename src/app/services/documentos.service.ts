@@ -36,7 +36,8 @@ export class DocumentosService {
     .pipe(
       map((resp) => {
         const documentos = resp.documentos
-            .map(doc => new Documentos(doc.nombre, doc.usuario, doc.fecha, doc.pdf, doc._id))
+            .map(doc => new Documentos(doc.nombre, doc. estado, doc. tipo, doc.usuario, doc.fecha, doc.pdf, doc._id))
+            console.log("DOCUMENRT ", resp )
         return documentos
       })
     )
@@ -47,7 +48,7 @@ export class DocumentosService {
     return this.http.get<CargarDocumentos>(url, this.getheaders())
       .pipe(
         map((resp)=> {
-          const documentos = resp.documentos.map(doc => new Documentos(doc.nombre, doc.usuario, doc.fecha, doc.pdf, doc._id))
+          const documentos = resp.documentos.map(doc => new Documentos(doc.nombre, doc.estado, doc.tipo, doc.usuario, doc.fecha, doc.pdf, doc._id))
           return documentos
         })
       )

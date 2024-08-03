@@ -25,6 +25,7 @@ export class MisDocumentosComponent implements OnInit{
   formSubmit = false
   public userLogged: string = ''
   private subscription: Subscription | undefined;
+  p: number = 1;
 
   constructor(private activatedRouted: ActivatedRoute, private documentosService: DocumentosService, private fb: FormBuilder, private router: Router, private usuariosService: UsuarioService){
     this.userLogged = this.usuariosService.getUserLogged()
@@ -52,11 +53,14 @@ export class MisDocumentosComponent implements OnInit{
     this.activatedRouted.params.subscribe(({id}) => {
       this.cargandoDocumentosPersonalesID(id)
     })
+
+    
   }
 
   reloadComponent() {
     // Lógica de recarga del componente
     console.log('reload');
+    
   }
 
   ngOnDestroy() {
@@ -70,6 +74,21 @@ export class MisDocumentosComponent implements OnInit{
     this.documentosService.cargarMisDocumentos(id).subscribe(resp => {
       this.documentos = resp
       this.cargando = false
+
+      this.documentos.forEach((doc) => {
+        if(doc.pdf && doc.estado==='INCOMPLETO') {
+          console.log('FALTA ACTUALIZAR EL ' + doc._id)
+          doc.estado = 'PENDIENTE'
+          this.documentosService.editarDocumento(doc).subscribe({
+            next: (resp) => {
+              console.log('ACTUALIZADO')
+            },
+            error: (error) => {
+              console.log('Error al actualizar estado del documento')
+            }
+          })
+        }
+      })
     })
   }
 

@@ -5,6 +5,8 @@ export class Documentos {
 
     constructor(
       public nombre: string,
+      public estado: 'INCOMPLETO' | 'PENDIENTE' | 'LISTO' | 'RECHAZADO',
+      public tipo: 'FACTURA' | 'INFORME',
       public usuario?: any,
       public fecha?: string,
       public pdf?: string,
