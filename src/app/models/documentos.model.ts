@@ -7,6 +7,7 @@ export class Documentos {
       public nombre: string,
       public estado: 'INCOMPLETO' | 'PENDIENTE' | 'LISTO' | 'RECHAZADO',
       public tipo: 'FACTURA' | 'INFORME',
+      public usuarioCreacion?: any,
       public usuario?: any,
       public fecha?: string,
       public pdf?: string,

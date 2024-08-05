@@ -25,15 +25,24 @@ export class DocumentosComponent implements OnInit {
   public cambioDeUsuario: boolean = false
   formSubmit = false
   private subscription: Subscription | undefined;
+  private userLogged: any
 
-  p: number = 1;
+  facturas: Documentos[] = [];
+  informes: Documentos[] = [];
+
+  public estados: string[] = ['PENDIENTE', 'LISTO', 'RECHAZADO'];
+
+  pf: number = 1;
+  pi: number = 1;
 
   constructor(private buscarService: BuscarService, private documentosService: DocumentosService, private fb: FormBuilder, private router: Router, private usuariosService: UsuarioService) {
     this.actualizacionDocumentoForm = fb.group({
       nombre: ['', Validators.required],
       fecha: [''],
-      usuario: [null]
+      usuario: [null],
     })
+
+    this.userLogged = this.usuariosService.getUserLogged()
   }
 
   ngOnInit(): void {
@@ -69,6 +78,9 @@ export class DocumentosComponent implements OnInit {
     this.documentosService.cargarDocumentosGenerales().subscribe({
       next: (resp) => {
         this.documentos = resp
+
+        this.facturas = this.documentos.filter(doc => doc.tipo === 'FACTURA');
+        this.informes = this.documentos.filter(doc => doc.tipo === 'INFORME');
       }
     })
   }
@@ -99,7 +111,7 @@ export class DocumentosComponent implements OnInit {
     this.usuarios = this.usuarios.filter(user => user.uid !== this.documento[0].usuario._id)
     this.actualizacionDocumentoForm.patchValue({
       nombre: this.documento[0].nombre,
-      fecha: this.documento[0].fecha,
+      fecha: this.documento[0].fecha
       //usuario: new Usuarios(this.documento[0].usuario.nombre, '', '', '', '', '', 'USER_ROLE', this.documento[0].usuario._id)
     })
     this.actualizacionDocumentoForm.get('usuario')?.setValue(this.documento[0].usuario);
@@ -182,5 +194,33 @@ export class DocumentosComponent implements OnInit {
     } else {
       this.cambioDeUsuario = false
     }
+  }
+
+  mostrarControlesEdicion(documento: any): boolean {
+    return this.userLogged === documento.usuarioCreacion?._id ? true : false
+  }
+
+  cambioEstado(documento: any) {
+    console.log(documento)
+    this.documentosService.editarDocumento(documento).subscribe({
+      next: (resp) => {
+        console.log(resp)
+        Swal.fire({
+          text: "Documento actualizado exitosamente!",
+          icon: "success"
+        });
+        this.fileInput?.nativeElement.click();
+        this.router.navigate(['/dashboard/temporary-route'], { skipLocationChange: true }).then(() => {
+          this.router.navigateByUrl(`/dashboard/documentos`);
+        });
+      },
+      error: (error) => {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Ocurrio un error al actualizar el documento",
+        });
+      }
+    })
   }
 }

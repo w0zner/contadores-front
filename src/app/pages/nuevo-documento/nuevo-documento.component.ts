@@ -16,18 +16,29 @@ export class NuevoDocumentoComponent implements OnInit {
   public nuevoDocumentoForm: FormGroup
   public usuarios: Usuarios[] = []
   public formSubmit = false
+  private userLoggedUID: string | undefined
+  public usuario: Usuarios | undefined
 
   constructor(private fb: FormBuilder, private usuariosService: UsuarioService, private documentosService: DocumentosService, private router: Router){
+    this.userLoggedUID = this.usuariosService.getUserLogged()
+    this.obtenerUsuario()
+
     this.nuevoDocumentoForm= this.fb.group({
       nombre: ['', Validators.required],
+      estado: ['LISTO'],
+      tipo: ['INFORME'],
+      usuarioCreacion: [''],
       usuario: ['', Validators.required],
-      fecha: ['', Validators.required],
-      tipo: ['INFORME']
+      fecha: ['', Validators.required]
     })
   }
 
   ngOnInit(): void {
     this.cargarUsusarios()
+
+    this.nuevoDocumentoForm.patchValue({
+      usuarioCreacion: this.usuario?.uid
+    })
   }
 
   cargarUsusarios() {
@@ -61,6 +72,14 @@ export class NuevoDocumentoComponent implements OnInit {
           timer: 800
         });
         this.router.navigateByUrl(`/dashboard/documentos/${resp.documento._id}`)
+      }
+    })
+  }
+
+  obtenerUsuario() {
+    this.usuariosService.getUsuario(this.userLoggedUID || '').subscribe({
+      next: (resp) => {
+        this.usuario = resp
       }
     })
   }

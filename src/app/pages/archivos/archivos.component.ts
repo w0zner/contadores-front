@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Usuarios } from 'src/app/models/usuarios.model';
 import { DocumentosService } from 'src/app/services/documentos.service';
 import { FileuploadService } from 'src/app/services/fileupload.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
@@ -80,7 +81,18 @@ export class ArchivosComponent implements OnInit {
             text: "Archivo subido con nombre: " + resp.archivo,
             icon: "success"
           });
-          this.router.navigateByUrl(`/dashboard/documentos/mis-documentos/${this.userLogged}`)
+          const usuarioRole = this.obtenerRolUsuario()
+
+
+          this.obtenerRolUsuario()
+          /*
+          if(usuarioRole==='USER_ROLE') {
+            this.router.navigateByUrl(`/dashboard/documentos/mis-documentos/${this.userLogged}`)
+          } else if(usuarioRole==='ADMIN_ROLE') {
+            this.router.navigateByUrl(`/dashboard/documentos`)
+          }
+          */
+
         })
         .catch(error => {
           Swal.fire({
@@ -93,6 +105,24 @@ export class ArchivosComponent implements OnInit {
   }
 
   regresarADocumentos(){
-    this.router.navigateByUrl(`/dashboard/documentos/mis-documentos/${this.userLogged}`)
+    this.obtenerRolUsuario()
+
+    //this.router.navigateByUrl(`/dashboard/documentos/mis-documentos/${this.userLogged}`)
+  }
+
+  obtenerRolUsuario() {
+    this.usuariosService.getUsuario(this.userLogged).subscribe({
+      next: (resp) => {
+        console.log(resp.role)
+
+        if(resp.role==='USER_ROLE') {
+          console.log(1)
+          this.router.navigateByUrl(`/dashboard/documentos/mis-documentos/${this.userLogged}`)
+        } else if(resp.role==='ADMIN_ROLE') {
+          console.log(2)
+          this.router.navigateByUrl(`/dashboard/documentos`)
+        }
+      }
+    })
   }
 }

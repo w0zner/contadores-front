@@ -2,7 +2,8 @@
     <div class="col-lg-12 col-xlg-12 col-md-7">
       <div class="card">
         <ul class="nav nav-tabs profile-tab" role="tablist">
-            <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#profile" role="tab">
+            <li class="nav-item">
+              <a class="nav-link active" data-toggle="tab" href="#profile" role="tab">
               <div class="font-weight-normal">Nuevo documento</div>
             </a> </li>
         </ul>
@@ -18,6 +19,11 @@
                               <p *ngIf="campoNoValido('nombre');"> Agregue el nombre a su documento</p>
                           </div>
                       </div>
+                      <div class="form-group">
+                        <label for="nombre">Tipo</label>
+                        <span class="badge badge-warning m-l-5 p-2">Informe</span>
+                        <!-- <input type="text" class="form-control form-control-line" value="Informe"> -->
+                    </div>
                       <div class="form-group">
                           <label>Elija el cliente a quien se le añadirá el archivo</label>
                           <select class="form-control" formControlName="usuario">

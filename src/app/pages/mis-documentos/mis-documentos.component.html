@@ -38,7 +38,7 @@
                                       <td>{{documento.nombre}}</td>
                                       <td>{{documento.usuario.nombre}}</td>
                                       <td>{{documento.fecha}}</td>
-                                      
+
                                       <td><span class="badge" [ngClass]="{
                                         'badge-info': documento.tipo === 'FACTURA',
                                         'badge-warning': documento.tipo === 'INFORME'
@@ -47,14 +47,14 @@
                                       <td class="cursor">
                                           <a target="_blank" href="{{documento.documentoURL()}}" download="{{documento.documentoURL()}}">{{documento.pdf}}</a>
                                       </td>
-                                      <td class="text-nowrap text-center" *ngIf="documento.tipo !== 'INFORME'">
-                                        <a data-toggle="modal" data-target=".example2-modal-lg" class="cursor" (click)="editarDocumento(documento._id || '')">
+                                      <td class="text-nowrap text-center">
+                                        <a data-toggle="modal" data-target=".example2-modal-lg" class="cursor" (click)="editarDocumento(documento._id || '')" *ngIf="mostrarControlesEdicion(documento)">
                                             <i class="fa fa-pencil text-inverse m-r-10"></i>
                                         </a>
-                                        <a data-toggle="tooltip" data-original-title="Borrar" class="cursor" (click)="eliminarDocumento(documento._id || '')">
+                                        <a data-toggle="tooltip" data-original-title="Borrar" class="cursor" (click)="eliminarDocumento(documento._id || '')" *ngIf="mostrarControlesEdicion(documento)">
                                             <i class="fa fa-close text-danger"></i>
                                         </a>
-                                        <a data-toggle="tooltip" data-original-title="archivo" class="cursor" (click)="editarArchivo(documento._id || '')" style="padding-left: 10px;">
+                                        <a data-toggle="tooltip" data-original-title="archivo" class="cursor" (click)="editarArchivo(documento._id || '')" style="padding-left: 10px;" *ngIf="mostrarControlesEdicion(documento)">
                                             <i class="fa fa-file-o"></i>
                                         </a>
                                     </td>

@@ -23,7 +23,7 @@ export class MisDocumentosComponent implements OnInit{
   public documento: any
   public usuario: any
   formSubmit = false
-  public userLogged: string = ''
+  private userLogged: string = ''
   private subscription: Subscription | undefined;
   p: number = 1;
 
@@ -54,13 +54,13 @@ export class MisDocumentosComponent implements OnInit{
       this.cargandoDocumentosPersonalesID(id)
     })
 
-    
+
   }
 
   reloadComponent() {
     // Lógica de recarga del componente
     console.log('reload');
-    
+
   }
 
   ngOnDestroy() {
@@ -207,5 +207,9 @@ export class MisDocumentosComponent implements OnInit{
         //this.router.navigateByUrl(`/dashboard/documentos/${resp.documento._id}`)
       }
     })
+  }
+
+  mostrarControlesEdicion(documento: any): boolean {
+    return this.userLogged === documento.usuarioCreacion?._id && documento.estado === 'PENDIENTE' || documento.estado === 'INCOMPLETO' ? true : false
   }
 }

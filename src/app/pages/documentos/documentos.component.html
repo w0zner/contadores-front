@@ -15,56 +15,141 @@
       <div class="card">
 
           <ul class="nav nav-tabs profile-tab" role="tablist">
-              <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#profile" role="tab">
-                <div class="font-weight-normal">Historial de documentos</div>
-              </a> </li>
+              <li class="nav-item" role="presentation">
+                <a class="nav-link active" data-toggle="tab" data-target="#profile" href="#" role="tab">
+                  <div class="font-weight-normal">Historial de facturas</div>
+                </a>
+              </li>
+              <li class="nav-item" role="presentation">
+                <a class="nav-link" data-toggle="tab" data-target="#informes" href="#" role="tab">
+                  <div class="font-weight-normal">Historial de informes</div>
+                </a>
+              </li>
           </ul>
 
           <div class="tab-content">
-            <div class="tab-pane active" id="profile" role="tabpanel">
+            <!-- Facturas -->
+            <div class="tab-pane fade show active" id="profile" role="tabpanel">
                 <div class="card-body">
                     <div class="table-responsive m-t-10">
                         <table id="example23" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
                                     <th>Nombre</th>
-                                    <th>Usuario</th>
+                                    <th>Usuario asignado</th>
                                     <th>Fecha</th>
+                                    <th>Tipo</th>
+                                    <th>Estado</th>
+                                    <th>Creado por</th>
                                     <th>Descargar</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let documento of documentos | paginate: { itemsPerPage: 25, currentPage: p }">
-                                    <td>{{ documento.nombre }}</td>
-                                    <td>{{ documento.usuario.nombre }}</td>
-                                    <td>{{ documento.fecha }}</td>
+                                <tr *ngFor="let factura of facturas | paginate: { id: 'facturas', itemsPerPage: 5, currentPage: pf }">
+                                    <td>{{ factura.nombre }}</td>
+                                    <td>{{ factura.usuario.nombre }}</td>
+                                    <td>{{ factura.fecha }}</td>
+                                    <td><span class="badge" [ngClass]="{
+                                      'badge-info': factura.tipo === 'FACTURA',
+                                      'badge-warning': factura.tipo === 'INFORME'
+                                    }" style="padding: 2px; border-radius: 3px;">{{factura.tipo}}</span>
+                                  </td>
+                                    <td>
+                                      <span *ngIf="!estados.includes(factura.estado)">{{factura.estado}}</span>
+                                      <select *ngIf="estados.includes(factura.estado)" class="form-control  custom-select-sm" [(ngModel)]="factura.estado" (change)="cambioEstado(factura)">
+                                        <option *ngFor="let estado of estados" value="{{estado}}"> {{estado}} </option>
+                                      </select>
+
+                                    </td>
+                                    <td>{{factura.usuarioCreacion?.nombre}}</td>
                                     <td class="cursor">
-                                        <a target="_blank" href="{{documento.documentoURL()}}" download="{{documento.documentoURL()}}">
-                                            {{documento.pdf}}
+                                        <a target="_blank" href="{{factura.documentoURL()}}" download="{{factura.documentoURL()}}">
+                                            {{factura.pdf}}
                                         </a>
                                     </td>
                                     <td class="text-nowrap text-center">
-                                        <a data-toggle="modal" data-target=".example2-modal-lg" class="cursor" (click)="editarDocumento(documento._id || '')">
+                                        <a data-toggle="modal" data-target=".example2-modal-lg" class="cursor" (click)="editarDocumento(factura._id || '')" *ngIf="mostrarControlesEdicion(factura)">
                                             <i class="fa fa-pencil text-inverse m-r-10"></i>
                                         </a>
-                                        <a data-toggle="tooltip" data-original-title="Borrar" class="cursor" (click)="eliminarDocumento(documento._id || '')">
+                                        <a data-toggle="tooltip" data-original-title="Borrar" class="cursor" (click)="eliminarDocumento(factura._id || '')" *ngIf="mostrarControlesEdicion(factura)">
                                             <i class="fa fa-close text-danger"></i>
                                         </a>
-                                        <a data-toggle="tooltip" data-original-title="archivo" class="cursor" (click)="editarArchivo(documento._id || '')" style="padding-left: 10px;">
+                                        <a data-toggle="tooltip" data-original-title="archivo" class="cursor" (click)="editarArchivo(factura._id || '')" style="padding-left: 10px;" *ngIf="mostrarControlesEdicion(factura)">
                                             <i class="fa fa-file-o"></i>
                                         </a>
+                                        <a data-toggle="tooltip" data-original-title="archivo" class="cursor" (click)="editarArchivo(factura._id || '')" style="padding-left: 10px;" data-toggle="tooltip" title="Observación">
+                                          <span class="mdi mdi-comment-outline"></span>
+                                      </a>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
-                        <div class="col-12 text-center m-b-20" *ngIf="documentos.length === 0">
+                        <div class="col-12 text-center m-b-20" *ngIf="facturas.length === 0">
                             <span>No hay datos que mostrar</span>
                         </div>
-                        <pagination-controls (pageChange)="p = $event" previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
+                        <pagination-controls id="facturas" (pageChange)="pf = $event" previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
                     </div>
                 </div>
             </div>
+
+            <!-- Informes -->
+            <div class="tab-pane fade show" id="informes" role="tabpanel">
+              <div class="card-body">
+                  <div class="table-responsive m-t-10">
+                      <table id="example23" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
+                          <thead>
+                              <tr>
+                                  <th>Nombre</th>
+                                  <th>Usuario asignado</th>
+                                  <th>Fecha</th>
+                                  <th>Tipo</th>
+                                  <th>Estado</th>
+                                  <th>Creado por</th>
+                                  <th>Descargar</th>
+                                  <th>Acciones</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                              <tr *ngFor="let documento of informes | paginate: { id: 'informes', itemsPerPage: 5, currentPage: pi }">
+                                  <td>{{ documento.nombre }}</td>
+                                  <td>{{ documento.usuario.nombre }}</td>
+                                  <td>{{ documento.fecha }}</td>
+                                  <td><span class="badge" [ngClass]="{
+                                    'badge-info': documento.tipo === 'FACTURA',
+                                    'badge-warning': documento.tipo === 'INFORME'
+                                  }" style="padding: 2px; border-radius: 3px;">{{documento.tipo}}</span></td>
+                                  <td>{{documento.estado}}</td>
+                                  <td>{{documento.usuarioCreacion?.nombre}}</td>
+                                  <td class="cursor">
+                                      <a target="_blank" href="{{documento.documentoURL()}}" download="{{documento.documentoURL()}}">
+                                          {{documento.pdf}}
+                                      </a>
+                                  </td>
+                                  <td class="text-nowrap text-center">
+                                      <a data-toggle="modal" data-target=".example2-modal-lg" class="cursor" (click)="editarDocumento(documento._id || '')" *ngIf="mostrarControlesEdicion(documento)">
+                                          <i class="fa fa-pencil text-inverse m-r-10"></i>
+                                      </a>
+                                      <a data-toggle="tooltip" data-original-title="Borrar" class="cursor" (click)="eliminarDocumento(documento._id || '')" *ngIf="mostrarControlesEdicion(documento)">
+                                          <i class="fa fa-close text-danger"></i>
+                                      </a>
+                                      <a data-toggle="tooltip" data-original-title="archivo" class="cursor" (click)="editarArchivo(documento._id || '')" style="padding-left: 10px;" *ngIf="mostrarControlesEdicion(documento)">
+                                          <i class="fa fa-file-o"></i>
+                                      </a>
+                                      <a data-toggle="tooltip" data-original-title="archivo" class="cursor" (click)="editarArchivo(documento._id || '')" style="padding-left: 10px;" >
+                                        <span class="mdi mdi-comment-outline"></span>
+                                    </a>
+                                  </td>
+                              </tr>
+                          </tbody>
+                      </table>
+                      <div class="col-12 text-center m-b-20" *ngIf="informes.length === 0">
+                          <span>No hay datos que mostrar</span>
+                      </div>
+                      <pagination-controls id="informes" (pageChange)="pi = $event" previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
+                  </div>
+              </div>
+          </div>
         </div>
       </div>
   </div>

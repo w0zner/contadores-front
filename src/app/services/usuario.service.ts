@@ -6,6 +6,7 @@ import { Login } from '../interfaces/login.interface';
 import { catchError, map, Observable, of, tap } from 'rxjs';
 import { Usuarios } from '../models/usuarios.model';
 import { CargarUsuarios } from '../interfaces/cargar-usuarios.interface';
+import { CargarUsuario } from '../interfaces/cargar-usuario.interface';
 
 const base_url = environment.url_raiz
 
@@ -98,6 +99,20 @@ export class UsuarioService {
 
   deleteUser(id: string) {
     return this.http.delete(`${base_url}/usuarios/${id}`, this.getheaders())
+  }
+
+  getUsuario(id: string) {
+    return this.http.get<{ ok: boolean, usuario: any }>(`${base_url}/usuarios/${id}`, this.getheaders())
+        .pipe(
+          map(resp => {
+            if (resp.ok) {
+              const usuario = new Usuarios(resp.usuario?.nombre, resp.usuario?.email, resp.usuario?.curp, resp.usuario?.telefono, resp.usuario?.estado, '', '', resp.usuario?.role, resp.usuario?.uid);
+              return usuario
+            } else {
+              throw new Error('Error al obtener usuario');
+            }
+          })
+        )
   }
 
 }
