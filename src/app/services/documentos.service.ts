@@ -36,7 +36,7 @@ export class DocumentosService {
     .pipe(
       map((resp) => {
         const documentos = resp.documentos
-            .map(doc => new Documentos(doc.nombre, doc.estado, doc.tipo, doc.usuarioCreacion, doc.usuario, doc.fecha, doc.pdf, doc._id))
+            .map(doc => new Documentos(doc.nombre, doc.estado, doc.tipo, doc.usuarioCreacion, doc.observacion, doc.usuario, doc.fecha, doc.pdf, doc._id))
             console.log("DOCUMENRT ", resp )
         return documentos
       })
@@ -48,7 +48,7 @@ export class DocumentosService {
     return this.http.get<CargarDocumentos>(url, this.getheaders())
       .pipe(
         map((resp)=> {
-          const documentos = resp.documentos.map(doc => new Documentos(doc.nombre, doc.estado, doc.tipo, doc.usuarioCreacion, doc.usuario, doc.fecha, doc.pdf, doc._id))
+          const documentos = resp.documentos.map(doc => new Documentos(doc.nombre, doc.estado, doc.tipo, doc.usuarioCreacion, doc.observacion, doc.usuario, doc.fecha, doc.pdf, doc._id))
           console.log("DOCUMENTG ", resp )
           return documentos
         })
@@ -63,6 +63,17 @@ export class DocumentosService {
   eliminarDocumento(id: string){
     const url = `${base_url}/documentos/${id}`
     return this.http.delete(url, this.getheaders())
+  }
+
+  getDocumentoByID(id: string) {
+    const url = `${base_url}/documentos/editar-documento/${id}`
+    return this.http.get(url, this.getheaders())
+      .pipe(
+        map((resp:any) => {
+          const documento = resp.documento as Documentos
+          return documento
+        })
+      )
   }
 
   editarDocumento(datos: Documentos) {

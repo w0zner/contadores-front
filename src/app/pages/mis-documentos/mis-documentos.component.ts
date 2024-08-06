@@ -33,7 +33,8 @@ export class MisDocumentosComponent implements OnInit{
     this.actualizacionDocumentoForm = fb.group({
       nombre: ['', Validators.required],
       fecha: [''],
-      usuario: [null]
+      usuario: [null],
+      observacion: ['']
     })
 
     this.nuevoDocumentoForm= this.fb.group({
@@ -102,6 +103,7 @@ export class MisDocumentosComponent implements OnInit{
     this.actualizacionDocumentoForm.patchValue({
       nombre: this.documento[0].nombre,
       fecha: this.documento[0].fecha,
+      observacion: this.documento[0].observacion,
       //usuario: new Usuarios(this.documento[0].usuario.nombre, '', '', '', '', '', 'USER_ROLE', this.documento[0].usuario._id)
     })
     this.actualizacionDocumentoForm.get('usuario')?.setValue(this.documento[0].usuario);
@@ -210,6 +212,6 @@ export class MisDocumentosComponent implements OnInit{
   }
 
   mostrarControlesEdicion(documento: any): boolean {
-    return this.userLogged === documento.usuarioCreacion?._id && documento.estado === 'PENDIENTE' || documento.estado === 'INCOMPLETO' ? true : false
+    return this.userLogged === documento.usuarioCreacion?._id && documento.estado === 'PENDIENTE' || documento.estado === 'INCOMPLETO' || documento.estado === 'RECHAZADO' ? true : false
   }
 }

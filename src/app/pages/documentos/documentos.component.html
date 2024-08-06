@@ -63,9 +63,9 @@
 
                                     </td>
                                     <td>{{factura.usuarioCreacion?.nombre}}</td>
-                                    <td class="cursor">
-                                        <a target="_blank" href="{{factura.documentoURL()}}" download="{{factura.documentoURL()}}">
-                                            {{factura.pdf}}
+                                    <td class="cursor" >
+                                        <a target="_blank" href="{{factura.documentoURL()}}" download="{{factura.documentoURL()}}" >
+                                            {{factura.pdf | slice:0:30}}{{factura.pdf !== undefined && factura.pdf.length > 30 ? '...' : ''}}
                                         </a>
                                     </td>
                                     <td class="text-nowrap text-center">
@@ -78,8 +78,11 @@
                                         <a data-toggle="tooltip" data-original-title="archivo" class="cursor" (click)="editarArchivo(factura._id || '')" style="padding-left: 10px;" *ngIf="mostrarControlesEdicion(factura)">
                                             <i class="fa fa-file-o"></i>
                                         </a>
-                                        <a data-toggle="tooltip" data-original-title="archivo" class="cursor" (click)="editarArchivo(factura._id || '')" style="padding-left: 10px;" data-toggle="tooltip" title="Observación">
-                                          <span class="mdi mdi-comment-outline"></span>
+                                        <a data-toggle="modal"  data-target=".modal-obs" class="cursor" (click)="editarDocumento(factura._id || '')" style="padding-left: 10px;" title="Observación" >
+                                          <span class="mdi" [ngClass]="{
+                                            'mdi-comment-outline': factura.observacion=== '' || factura.observacion=== undefined,
+                                            'mdi-comment': factura.observacion !== '' && factura.observacion !== undefined
+                                          }"></span>
                                       </a>
                                     </td>
                                 </tr>
@@ -136,7 +139,7 @@
                                       <a data-toggle="tooltip" data-original-title="archivo" class="cursor" (click)="editarArchivo(documento._id || '')" style="padding-left: 10px;" *ngIf="mostrarControlesEdicion(documento)">
                                           <i class="fa fa-file-o"></i>
                                       </a>
-                                      <a data-toggle="tooltip" data-original-title="archivo" class="cursor" (click)="editarArchivo(documento._id || '')" style="padding-left: 10px;" >
+                                      <a data-toggle="tooltip" data-original-title="archivo" class="cursor" style="padding-left: 10px;" >
                                         <span class="mdi mdi-comment-outline"></span>
                                     </a>
                                   </td>
@@ -227,3 +230,51 @@
   </div>
   </div>
   </div>
+
+  <div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+            <!-- sample modal content -->
+                <div class="modal fade modal-obs" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="myLargeModalLabel">Agregar Observación al documento</h4>
+                                <button type="button" class="close" #fileInput data-dismiss="modal" aria-hidden="true">×</button>
+                            </div>
+                            <div class="card">
+                                <form [formGroup]="actualizacionDocumentoForm"
+                                (submit)="actualizarObsercion()"
+                                   >
+                                <div class="card-body">
+                                    <div class="form-body">
+                                        <div class="row p-t-20">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                  <label for="observacion">Observación</label>
+                                                  <textarea class="form-control" formControlName="observacion" rows="3"></textarea>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col text-danger">
+                                                        <p *ngIf="campoNoValido('nombre');"> Agregue un nombre</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="form-actions">
+                                            <button  class="btn btn-success"> <i class="fa fa-check" ></i> Guardar </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>

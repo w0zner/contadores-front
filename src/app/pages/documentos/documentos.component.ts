@@ -37,9 +37,12 @@ export class DocumentosComponent implements OnInit {
 
   constructor(private buscarService: BuscarService, private documentosService: DocumentosService, private fb: FormBuilder, private router: Router, private usuariosService: UsuarioService) {
     this.actualizacionDocumentoForm = fb.group({
+      _id: [''],
       nombre: ['', Validators.required],
       fecha: [''],
+      estado: [''],
       usuario: [null],
+      observacion: ['']
     })
 
     this.userLogged = this.usuariosService.getUserLogged()
@@ -105,16 +108,20 @@ export class DocumentosComponent implements OnInit {
     }
   }
 
-  editarDocumento(id: string){
+  editarDocumento(id: string) {
     this.documento = this.documentos.filter(doc => doc._id === id)
-    this.usuario = this.documento[0].usuario.nombre
-    this.usuarios = this.usuarios.filter(user => user.uid !== this.documento[0].usuario._id)
+    //this.usuario = this.documento[0].usuario.nombre
+    //this.usuarios = this.usuarios.filter(user => user.uid !== this.documento[0].usuario._id)
     this.actualizacionDocumentoForm.patchValue({
+      _id: this.documento[0]._id,
       nombre: this.documento[0].nombre,
-      fecha: this.documento[0].fecha
+      fecha: this.documento[0].fecha,
+      estado: this.documento[0].estado,
+      observacion: this.documento[0].observacion,
       //usuario: new Usuarios(this.documento[0].usuario.nombre, '', '', '', '', '', 'USER_ROLE', this.documento[0].usuario._id)
     })
     this.actualizacionDocumentoForm.get('usuario')?.setValue(this.documento[0].usuario);
+    console.log(this.actualizacionDocumentoForm.value)
   }
 
   actualizarDocumento() {
@@ -203,6 +210,31 @@ export class DocumentosComponent implements OnInit {
   cambioEstado(documento: any) {
     console.log(documento)
     this.documentosService.editarDocumento(documento).subscribe({
+      next: (resp) => {
+        console.log(resp)
+        Swal.fire({
+          text: "Documento actualizado exitosamente!",
+          icon: "success"
+        });
+        this.fileInput?.nativeElement.click();
+        this.router.navigate(['/dashboard/temporary-route'], { skipLocationChange: true }).then(() => {
+          this.router.navigateByUrl(`/dashboard/documentos`);
+        });
+      },
+      error: (error) => {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Ocurrio un error al actualizar el documento",
+        });
+      }
+    })
+  }
+
+  actualizarObsercion() {
+    console.log(this.actualizacionDocumentoForm.value)
+
+    this.documentosService.editarDocumento(this.actualizacionDocumentoForm.value).subscribe({
       next: (resp) => {
         console.log(resp)
         Swal.fire({

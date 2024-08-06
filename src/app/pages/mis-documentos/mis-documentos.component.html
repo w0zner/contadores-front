@@ -43,7 +43,12 @@
                                         'badge-info': documento.tipo === 'FACTURA',
                                         'badge-warning': documento.tipo === 'INFORME'
                                       }" style="padding: 2px; border-radius: 3px;">{{documento.tipo}}</span></td>
-                                      <td>{{documento.estado}}</td>
+                                      <td>
+                                        <span class="mdi mdi-check" *ngIf="documento.estado === 'LISTO'"></span>
+                                        <span class="mdi mdi-alert-box" *ngIf="documento.estado === 'INCOMPLETO'"></span>
+                                        <span class="mdi mdi-block-helper" *ngIf="documento.estado === 'RECHAZADO'"></span>
+                                        <span class="mdi mdi-alarm" *ngIf="documento.estado === 'PENDIENTE'"></span>
+                                        {{documento.estado}}</td>
                                       <td class="cursor">
                                           <a target="_blank" href="{{documento.documentoURL()}}" download="{{documento.documentoURL()}}">{{documento.pdf}}</a>
                                       </td>
@@ -57,7 +62,13 @@
                                         <a data-toggle="tooltip" data-original-title="archivo" class="cursor" (click)="editarArchivo(documento._id || '')" style="padding-left: 10px;" *ngIf="mostrarControlesEdicion(documento)">
                                             <i class="fa fa-file-o"></i>
                                         </a>
-                                    </td>
+                                        <a data-toggle="modal"  data-target=".modal-obs" class="cursor" (click)="editarDocumento(documento._id || '')" style="padding-left: 10px;" title="Observación" >
+                                          <span class="mdi" [ngClass]="{
+                                            'mdi-comment-outline': documento.observacion=== '' || documento.observacion=== undefined,
+                                            'mdi-comment': documento.observacion !== '' && documento.observacion !== undefined
+                                          }"></span>
+                                      </a>
+                                      </td>
                                   </tr>
                               </tbody>
                           </table>
@@ -183,4 +194,40 @@
     </div>
     </div>
     </div>
+
+    <div class="row">
+      <div class="col-md-4">
+          <div class="card">
+              <div class="card-body">
+              <!-- sample modal content -->
+                  <div class="modal fade modal-obs" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+                      <div class="modal-dialog modal-lg">
+                          <div class="modal-content">
+                              <div class="modal-header">
+                                  <h4 class="modal-title" id="myLargeModalLabel">Observación sobre el documento</h4>
+                                  <button type="button" class="close" #fileInput data-dismiss="modal" aria-hidden="true">×</button>
+                              </div>
+
+                                  <form [formGroup]="actualizacionDocumentoForm">
+                                  <div class="card-body">
+                                      <div class="form-body">
+                                          <div class="row p-t-5">
+                                              <div class="col-md-12">
+                                                  <div class="form-group">
+                                                    <label for="observacion">Observación</label>
+                                                    <textarea class="form-control" formControlName="observacion" rows="3" readonly></textarea>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  </form>
+
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      </div>
+      </div>
 

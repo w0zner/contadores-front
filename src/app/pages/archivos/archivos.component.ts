@@ -81,10 +81,23 @@ export class ArchivosComponent implements OnInit {
             text: "Archivo subido con nombre: " + resp.archivo,
             icon: "success"
           });
-          const usuarioRole = this.obtenerRolUsuario()
+
+          this.documentosService.getDocumentoByID(this.id || '').subscribe({
+            next: (resp) => {
+              resp.estado = 'PENDIENTE'
+              this.documentosService.editarDocumento(resp).subscribe({
+                next: (response) => {
+                  console.log("documento con estado actualizado")
+                  this.obtenerRolUsuario()
+                }
+              })
+            }
+          })
+
+          //const usuarioRole = this.obtenerRolUsuario()
 
 
-          this.obtenerRolUsuario()
+
           /*
           if(usuarioRole==='USER_ROLE') {
             this.router.navigateByUrl(`/dashboard/documentos/mis-documentos/${this.userLogged}`)
