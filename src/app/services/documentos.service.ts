@@ -4,6 +4,7 @@ import { Documentos } from '../models/documentos.model';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs';
 import { CargarDocumentos } from '../interfaces/cargar-documentos.interface';
+import { HeaderService } from './header.service';
 
 const base_url = environment.url_raiz
 
@@ -12,27 +13,13 @@ const base_url = environment.url_raiz
 })
 export class DocumentosService {
 
+  private url = `${base_url}/documentos`
   documento: Documentos | undefined
 
-  constructor(private http: HttpClient) { }
-
-  getToken():string {
-    return localStorage.getItem('token') || ''
-  }
-
-  getheaders() {
-    return {
-      headers: { 'x-token': this.getToken() }
-    }
-  }
-
-  getId(){
-    return this.documento?._id
-  }
+  constructor(private http: HttpClient, private headerService: HeaderService) { }
 
   cargarMisDocumentos(id: string) {
-    const url = `${base_url}/documentos/mis-documentos`
-    return this.http.get<CargarDocumentos>(`${url}/${id}`, this.getheaders())
+    return this.http.get<CargarDocumentos>(`${this.url}/mis-documentos/${id}`, { headers: this.headerService.headers })
     .pipe(
       map((resp) => {
         const documentos = resp.documentos
@@ -44,8 +31,7 @@ export class DocumentosService {
   }
 
   cargarDocumentosGenerales() {
-    const url = `${base_url}/documentos/`
-    return this.http.get<CargarDocumentos>(url, this.getheaders())
+    return this.http.get<CargarDocumentos>(this.url, { headers: this.headerService.headers })
       .pipe(
         map((resp)=> {
           const documentos = resp.documentos.map(doc => new Documentos(doc.nombre, doc.estado, doc.tipo, doc.usuarioCreacion, doc.observacion, doc.usuario, doc.fecha, doc.pdf, doc._id))
@@ -55,19 +41,9 @@ export class DocumentosService {
       )
   }
 
-  crearDocumento(data: Documentos) {
-    const url = `${base_url}/documentos/`
-    return this.http.post(url, data, this.getheaders())
-  }
-
-  eliminarDocumento(id: string){
-    const url = `${base_url}/documentos/${id}`
-    return this.http.delete(url, this.getheaders())
-  }
-
-  getDocumentoByID(id: string) {
-    const url = `${base_url}/documentos/editar-documento/${id}`
-    return this.http.get(url, this.getheaders())
+  obtenerDocumentoPorId(id: string) {
+    const url = `${this.url}/editar-documento/${id}`
+    return this.http.get(url, { headers: this.headerService.headers })
       .pipe(
         map((resp:any) => {
           const documento = resp.documento as Documentos
@@ -76,12 +52,19 @@ export class DocumentosService {
       )
   }
 
+  crearDocumento(data: Documentos) {
+    return this.http.post(this.url, data, { headers: this.headerService.headers })
+  }
+
   editarDocumento(datos: Documentos) {
-    const url = `${base_url}/documentos/editar-documento/${datos._id}`
-    return this.http.put(url, datos, this.getheaders())
+    const url = `${this.url}/editar-documento/${datos._id}`
+    return this.http.put(url, datos, { headers: this.headerService.headers })
       .pipe(
         map((resp:any) => resp.documento)
       )
   }
 
+  eliminarDocumento(id: string){
+    return this.http.delete(`${this.url}/${id}`, { headers: this.headerService.headers })
+  }
 }

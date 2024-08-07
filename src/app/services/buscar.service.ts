@@ -4,6 +4,7 @@ import { map } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Usuarios } from '../models/usuarios.model';
 import { Documentos } from '../models/documentos.model';
+import { HeaderService } from './header.service';
 
 const base_url = environment.url_raiz
 
@@ -12,20 +13,10 @@ const base_url = environment.url_raiz
 })
 export class BuscarService {
 
-  constructor(private http: HttpClient) { }
-
-  getToken():string {
-    return localStorage.getItem('token') || ''
-  }
-
-  getheaders() {
-    return {
-      headers: { 'x-token': this.getToken() }
-    }
-  }
+  constructor(private http: HttpClient, private headerService: HeaderService) { }
 
   buscarTermino(tabla: 'usuarios' | 'documentos', termino: string){
-    return this.http.get(`${base_url}/buscar/coleccion/${tabla}/${termino}`, this.getheaders())
+    return this.http.get(`${base_url}/buscar/coleccion/${tabla}/${termino}`, { headers: this.headerService.headers })
       .pipe(
         map((resp: any) => {
           switch(tabla) {

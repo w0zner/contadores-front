@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { BuscarService } from 'src/app/services/buscar.service';
-import { DocumentosService } from 'src/app/services/documentos.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import Swal from 'sweetalert2'
 
@@ -10,14 +9,15 @@ import Swal from 'sweetalert2'
   templateUrl: './perfil.component.html',
   styleUrls: ['./perfil.component.css']
 })
-export class PerfilComponent implements OnInit {
+export class PerfilComponent {
 
   public perfilForm: FormGroup
   public usuario: any
   public isSubmit: boolean = false
 
-  constructor(private usuarioService: UsuarioService, private fb: FormBuilder, private buscarService: BuscarService){
-    this.usuario=this.usuarioService.usuario
+  constructor(private authService: AuthService, private usuarioService: UsuarioService, private fb: FormBuilder){
+    this.usuario= this.authService.usuario
+
     this.perfilForm = this.fb.group({
       nombre: [this.usuario.nombre, Validators.required],
       email: [this.usuario.email, Validators.email],
@@ -25,9 +25,6 @@ export class PerfilComponent implements OnInit {
       telefono: [this.usuario.telefono, Validators.required],
       role: [this.usuario.role, Validators.required]
      })
-  }
-
-  ngOnInit(): void {
   }
 
   verificarForm():boolean{
@@ -58,18 +55,10 @@ export class PerfilComponent implements OnInit {
       if (result.isConfirmed) {
         this.usuarioService.actualizarUsuario(this.usuario.uid, this.perfilForm.value).subscribe({
           next: (resp: any) => {
-            Swal.fire({
-              title: "Registro Actualizado",
-              text: resp.msg,
-              icon: "success"
-            });
+            Swal.fire({ title: "Registro Actualizado", text: resp.msg, icon: "success" });
           },
           error: (error) => {
-            Swal.fire({
-              icon: "error",
-              title: "Oops...",
-              text: "Ocurrio un error al actualizar",
-            });
+            Swal.fire({ icon: "error", title: "Oops...", text: "Ocurrio un error al actualizar" });
           }
         })
       }

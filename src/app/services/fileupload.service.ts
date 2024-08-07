@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import { LocalStorageService } from './local-storage.service';
 
 const base_url = environment.url_raiz
 
@@ -9,17 +10,7 @@ const base_url = environment.url_raiz
 })
 export class FileuploadService {
 
-  constructor(private http: HttpClient) { }
-
-  getToken():string {
-    return localStorage.getItem('token') || ''
-  }
-
-  getheaders() {
-    return {
-      headers: { 'x-token': this.getToken() }
-    }
-  }
+  constructor(private http: HttpClient, private localStorageService: LocalStorageService) { }
 
   async subirArchivo(archivo: File, tabla: 'usuarios' | 'documentos', id: string) {
     const url = `${base_url}/upload/${tabla}/${id}`
@@ -29,7 +20,7 @@ export class FileuploadService {
 
       const resp = await fetch(url, {
         method: 'PUT',
-        headers: { 'x-token': this.getToken() },
+        headers: { 'x-token': this.localStorageService.getItem('token', false) },
         body: formData
       })
 

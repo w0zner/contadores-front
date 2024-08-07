@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import Swal from 'sweetalert2'
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { Router } from '@angular/router';
+import { AlertMessageService } from 'src/app/services/alert-message.service';
+
 
 @Component({
   selector: 'app-registro',
@@ -14,7 +15,7 @@ export class RegistroComponent {
   registroForm: FormGroup;
   formSubmit= false
 
-  constructor(private fb: FormBuilder, private usuarioService: UsuarioService, private router: Router){
+  constructor(private fb: FormBuilder, private usuarioService: UsuarioService, private alertMessageService: AlertMessageService, private router: Router){
     this.registroForm = this.fb.group({
       nombre: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -34,20 +35,11 @@ export class RegistroComponent {
     }
     this.usuarioService.crearUsuario(this.registroForm.value).subscribe({
       next: (response) => {
-        Swal.fire({
-          icon: "success",
-          title: "Registro exitoso!",
-          text: "Estas listo para iniciar sesión..",
-        });
-
+        this.alertMessageService.mensajeExitosoOk("Registro exitoso!", "Estas listo para iniciar sesión..")
         this.router.navigateByUrl('/login')
       },
       error: (error) => {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: error.error.msg,
-        });
+        this.alertMessageService.mensajeErrorOk("Oops...", error.error.msg)
       }
     })
   }

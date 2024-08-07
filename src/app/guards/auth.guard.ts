@@ -1,14 +1,14 @@
 import { CanActivateFn, Router } from '@angular/router';
-import { UsuarioService } from '../services/usuario.service';
 import { inject } from '@angular/core';
 import { tap } from 'rxjs';
+import { AuthService } from '../services/auth.service';
 
 export const authGuard: CanActivateFn = (route, state) => {
-  const usuarioService= inject(UsuarioService);
+  const authService= inject(AuthService);
   const router= inject(Router);
 
 
-  return usuarioService.refreshToken()
+  return authService.refreshToken()
   .pipe(
     tap(isLogged => {
       console.log("guard", isLogged)

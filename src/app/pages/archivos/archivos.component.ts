@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Usuarios } from 'src/app/models/usuarios.model';
+import { AlertMessageService } from 'src/app/services/alert-message.service';
 import { DocumentosService } from 'src/app/services/documentos.service';
 import { FileuploadService } from 'src/app/services/fileupload.service';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
-import Swal from 'sweetalert2'
 declare var JQuery: any;
 declare var $: any;
 
@@ -17,15 +18,25 @@ export class ArchivosComponent implements OnInit {
 
   public file: File | undefined
   public id: string | undefined
-  public userLogged: string = ''
+  public usuarioLogueadoID: string = ''
 
-  constructor(private activatedRoute: ActivatedRoute, private router: Router, private fileUploadService: FileuploadService, private usuariosService: UsuarioService, private documentosService: DocumentosService) { }
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private localStorageService: LocalStorageService,
+    private router: Router,
+    private fileUploadService: FileuploadService,
+    private usuariosService: UsuarioService,
+    private documentosService: DocumentosService,
+    private alertMessageService: AlertMessageService
+  ) { }
 
   ngOnInit(): void {
-    this.userLogged = this.usuariosService.getUserLogged()
+    this.usuarioLogueadoID = this.localStorageService.getItem('user', false)
+
     this.activatedRoute.params.subscribe(params => {
       this.id = params['id']
     })
+
     $(document).ready(function() {
       // Basic
       $('.dropify').dropify();
@@ -76,63 +87,42 @@ export class ArchivosComponent implements OnInit {
     if(this.file) {
       this.fileUploadService.subirArchivo(this.file, 'documentos', this.id || '')
         .then(resp => {
-          Swal.fire({
-            title: resp.msg,
-            text: "Archivo subido con nombre: " + resp.archivo,
-            icon: "success"
-          });
+          this.alertMessageService.mensajeExitosoOk(resp.msg, "Archivo subido con nombre: " + resp.archivo)
 
-          this.documentosService.getDocumentoByID(this.id || '').subscribe({
+          //Actualiza el estado del documento luego de subir el archivo
+          this.documentosService.obtenerDocumentoPorId(this.id || '').subscribe({
             next: (resp) => {
-              resp.estado = 'PENDIENTE'
-              this.documentosService.editarDocumento(resp).subscribe({
-                next: (response) => {
-                  console.log("documento con estado actualizado")
-                  this.obtenerRolUsuario()
-                }
-              })
+              if(resp.tipo !== 'INFORME') {
+                resp.estado = 'PENDIENTE'
+                console.log(resp)
+                this.documentosService.editarDocumento(resp).subscribe({
+                  next: (response) => {
+                    console.log("documento con estado actualizado")
+                    this.obtenerRolUsuario()
+                  }
+                })
+              } else {
+                this.obtenerRolUsuario()
+              }
             }
           })
-
-          //const usuarioRole = this.obtenerRolUsuario()
-
-
-
-          /*
-          if(usuarioRole==='USER_ROLE') {
-            this.router.navigateByUrl(`/dashboard/documentos/mis-documentos/${this.userLogged}`)
-          } else if(usuarioRole==='ADMIN_ROLE') {
-            this.router.navigateByUrl(`/dashboard/documentos`)
-          }
-          */
-
         })
         .catch(error => {
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "Ocurrio un error al subir el archivo",
-          });
+          this.alertMessageService.mensajeErrorOk("Oops...",  "Ocurrio un error al subir el archivo")
         })
     }
   }
 
   regresarADocumentos(){
     this.obtenerRolUsuario()
-
-    //this.router.navigateByUrl(`/dashboard/documentos/mis-documentos/${this.userLogged}`)
   }
 
   obtenerRolUsuario() {
-    this.usuariosService.getUsuario(this.userLogged).subscribe({
+    this.usuariosService.obtenerUsuarioPorId(this.usuarioLogueadoID).subscribe({
       next: (resp) => {
-        console.log(resp.role)
-
         if(resp.role==='USER_ROLE') {
-          console.log(1)
-          this.router.navigateByUrl(`/dashboard/documentos/mis-documentos/${this.userLogged}`)
+          this.router.navigateByUrl(`/dashboard/documentos/mis-documentos/${this.usuarioLogueadoID}`)
         } else if(resp.role==='ADMIN_ROLE') {
-          console.log(2)
           this.router.navigateByUrl(`/dashboard/documentos`)
         }
       }

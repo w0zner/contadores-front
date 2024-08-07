@@ -3,8 +3,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Documentos } from 'src/app/models/documentos.model';
+import { AlertMessageService } from 'src/app/services/alert-message.service';
 import { DocumentosService } from 'src/app/services/documentos.service';
-import { UsuarioService } from 'src/app/services/usuario.service';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
 import Swal from 'sweetalert2'
 
 @Component({
@@ -16,19 +17,26 @@ export class MisDocumentosComponent implements OnInit{
 
   @ViewChild('fileInput') fileInput:ElementRef | undefined;
   @ViewChild('modalClose') modalClose:ElementRef | undefined;
-  cargando: boolean = false
-  public documentos: Documentos[] = []
-  public actualizacionDocumentoForm: FormGroup
+
+  private cargando: boolean = false
   public nuevoDocumentoForm: FormGroup
+  public actualizacionDocumentoForm: FormGroup
   public documento: any
-  public usuario: any
-  formSubmit = false
-  private userLogged: string = ''
+  public documentos: Documentos[] = []
+  public formSubmit = false
+  private usuarioLogueadoID: string
   private subscription: Subscription | undefined;
   p: number = 1;
 
-  constructor(private activatedRouted: ActivatedRoute, private documentosService: DocumentosService, private fb: FormBuilder, private router: Router, private usuariosService: UsuarioService){
-    this.userLogged = this.usuariosService.getUserLogged()
+  constructor(
+    private activatedRouted: ActivatedRoute,
+    private localStorageService: LocalStorageService,
+    private documentosService: DocumentosService,
+    private fb: FormBuilder,
+    private router: Router,
+    private alertMessageService: AlertMessageService){
+
+    this.usuarioLogueadoID = this.localStorageService.getItem('user', false)
 
     this.actualizacionDocumentoForm = fb.group({
       nombre: ['', Validators.required],
@@ -39,7 +47,7 @@ export class MisDocumentosComponent implements OnInit{
 
     this.nuevoDocumentoForm= this.fb.group({
       nombre: ['', Validators.required],
-      usuario: [this.userLogged, Validators.required],
+      usuario: [this.usuarioLogueadoID, Validators.required],
       fecha: ['', Validators.required]
     })
   }
@@ -54,14 +62,11 @@ export class MisDocumentosComponent implements OnInit{
     this.activatedRouted.params.subscribe(({id}) => {
       this.cargandoDocumentosPersonalesID(id)
     })
-
-
   }
 
   reloadComponent() {
     // Lógica de recarga del componente
     console.log('reload');
-
   }
 
   ngOnDestroy() {
@@ -75,38 +80,21 @@ export class MisDocumentosComponent implements OnInit{
     this.documentosService.cargarMisDocumentos(id).subscribe(resp => {
       this.documentos = resp
       this.cargando = false
-
-      this.documentos.forEach((doc) => {
-        if(doc.pdf && doc.estado==='INCOMPLETO') {
-          console.log('FALTA ACTUALIZAR EL ' + doc._id)
-          doc.estado = 'PENDIENTE'
-          this.documentosService.editarDocumento(doc).subscribe({
-            next: (resp) => {
-              console.log('ACTUALIZADO')
-            },
-            error: (error) => {
-              console.log('Error al actualizar estado del documento')
-            }
-          })
-        }
-      })
     })
   }
 
 
   //-----------------------------------------------------------------------------------------------------------//
 
-  editarDocumento(id: string){
+  seleccionarDocumento(id: string){
+    //Obtener documento de la lista de documentos
     this.documento = this.documentos.filter(doc => doc._id === id)
-    this.usuario = this.documento[0].usuario.nombre
-    //this.usuarios = this.usuarios.filter(user => user.uid !== this.documento[0].usuario._id)
+
     this.actualizacionDocumentoForm.patchValue({
       nombre: this.documento[0].nombre,
       fecha: this.documento[0].fecha,
       observacion: this.documento[0].observacion,
-      //usuario: new Usuarios(this.documento[0].usuario.nombre, '', '', '', '', '', 'USER_ROLE', this.documento[0].usuario._id)
     })
-    this.actualizacionDocumentoForm.get('usuario')?.setValue(this.documento[0].usuario);
   }
 
   actualizarDocumento() {
@@ -119,24 +107,18 @@ export class MisDocumentosComponent implements OnInit{
     let doc: Documentos = this.documento[0]
     doc.nombre = this.actualizacionDocumentoForm.get('nombre')?.value
     doc.fecha = this.actualizacionDocumentoForm.get('fecha')?.value
-    //doc.usuario = this.actualizacionDocumentoForm.get('usuario')?.value
+
     this.documentosService.editarDocumento(doc).subscribe({
       next: (resp) => {
-        Swal.fire({
-          text: "Documento actualizado exitosamente!",
-          icon: "success"
-        });
+        this.alertMessageService.mensajeCortoExitosoOk("Documento actualizado exitosamente!")
+
         this.fileInput?.nativeElement.click();
         this.router.navigate(['/dashboard/temporary-route'], { skipLocationChange: true }).then(() => {
-          this.router.navigateByUrl(`/dashboard/documentos`);
+          this.router.navigateByUrl(`/dashboard/documentos/mis-documentos/${this.usuarioLogueadoID}`)
         });
       },
       error: (error) => {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "Ocurrio un error al actualizar el documento",
-        });
+        this.alertMessageService.mensajeErrorOk("Oops...", "Ocurrio un error al actualizar el documento")
       }
     })
   }
@@ -159,21 +141,14 @@ export class MisDocumentosComponent implements OnInit{
       if (result.isConfirmed) {
         this.documentosService.eliminarDocumento(id).subscribe({
           next: (resp: any) => {
-            Swal.fire({
-              text: resp.msg,
-              icon: "success"
-            });
+            this.alertMessageService.mensajeCortoExitosoOk(resp.msg)
 
             this.router.navigate(['/dashboard/temporary-route'], { skipLocationChange: true }).then(() => {
-              this.router.navigateByUrl(`/dashboard/documentos`);
+              this.router.navigateByUrl(`/dashboard/documentos/mis-documentos/${this.usuarioLogueadoID}`)
             });
           },
           error: (error) => {
-            Swal.fire({
-              title: "Oops...",
-              icon: "error",
-              text: error.msg,
-            });
+            this.alertMessageService.mensajeErrorOk("Oops...", error.msg)
           }
         })
       }
@@ -196,22 +171,17 @@ export class MisDocumentosComponent implements OnInit{
 
     this.documentosService.crearDocumento(this.nuevoDocumentoForm.value).subscribe({
       next: (resp:any) => {
-        Swal.fire({
-          text: "Datos Guardados",
-          icon: "success",
-          showConfirmButton: false,
-          timer: 800
-        });
+        this.alertMessageService.mensajeFlashConfirmation("Datos Guardados")
+
         this.modalClose?.nativeElement.click();
         this.router.navigate(['/dashboard/temporary-route'], { skipLocationChange: true }).then(() => {
           this.router.navigateByUrl(`/dashboard/documentos/${resp.documento._id}`);
         });
-        //this.router.navigateByUrl(`/dashboard/documentos/${resp.documento._id}`)
       }
     })
   }
 
   mostrarControlesEdicion(documento: any): boolean {
-    return this.userLogged === documento.usuarioCreacion?._id && documento.estado === 'PENDIENTE' || documento.estado === 'INCOMPLETO' || documento.estado === 'RECHAZADO' ? true : false
+    return this.usuarioLogueadoID === documento.usuarioCreacion?._id && documento.estado === 'PENDIENTE' || documento.estado === 'INCOMPLETO' || documento.estado === 'RECHAZADO' ? true : false
   }
 }

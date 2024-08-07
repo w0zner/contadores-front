@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Usuarios } from 'src/app/models/usuarios.model';
+import { AlertMessageService } from 'src/app/services/alert-message.service';
 import { BuscarService } from 'src/app/services/buscar.service';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-usuarios',
@@ -12,16 +14,14 @@ import Swal from 'sweetalert2'
 export class UsuariosComponent implements OnInit{
 
   public usuarios: Usuarios[] = []
-  public userLogged: string = ''
+  public usuarioLogueadoID: string = ''
 
   p: number = 1;
 
-  constructor(private usuarioService: UsuarioService, private buscarService: BuscarService) {
-
-  }
+  constructor(private usuarioService: UsuarioService, private localStorageService: LocalStorageService, private buscarService: BuscarService, private alertMessageService: AlertMessageService) { }
 
   ngOnInit(): void {
-    this.userLogged = this.usuarioService.getUserLogged()
+    this.usuarioLogueadoID = this.localStorageService.getItem('user', false)
     this.cargarUsuarios()
   }
 
@@ -49,17 +49,10 @@ export class UsuariosComponent implements OnInit{
   actualizarUsuario(user: Usuarios) {
     this.usuarioService.updateUser(user).subscribe({
       next: (resp: any) => {
-        Swal.fire({
-          text: resp.msg,
-          icon: "success"
-        });
+        this.alertMessageService.mensajeCortoExitosoOk(resp.msg)
       },
       error: (error) => {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "Ocurrio un error al actualizar el usuario",
-        });
+        this.alertMessageService.mensajeErrorOk("Oops...", "Ocurrio un error al actualizar el usuario")
       }
     })
   }
@@ -76,7 +69,7 @@ export class UsuariosComponent implements OnInit{
       cancelButtonText: "Cancelar"
     }).then((result) => {
       if (result.isConfirmed) {
-        this.usuarioService.deleteUser(id).subscribe({
+        this.usuarioService.eliminarUsuario(id).subscribe({
           next: (resp: any) => {
             Swal.fire({
               text: resp.msg,

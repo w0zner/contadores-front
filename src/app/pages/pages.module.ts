@@ -13,8 +13,6 @@ import { MisDocumentosComponent } from './mis-documentos/mis-documentos.componen
 import { NgxPaginationModule } from 'ngx-pagination';
 import { EmptyComponent } from './empty/empty.component';
 
-
-
 @NgModule({
   declarations: [PagesComponent, PerfilComponent, UsuariosComponent, NuevoDocumentoComponent, DocumentosComponent, ArchivosComponent, MisDocumentosComponent, EmptyComponent],
   imports: [
@@ -26,7 +24,7 @@ import { EmptyComponent } from './empty/empty.component';
     ReactiveFormsModule
   ],
   exports: [
-    PagesComponent, PerfilComponent, UsuariosComponent, NuevoDocumentoComponent, DocumentosComponent, ArchivosComponent, MisDocumentosComponent
+    PagesComponent, PerfilComponent, UsuariosComponent, NuevoDocumentoComponent, DocumentosComponent, ArchivosComponent, MisDocumentosComponent, EmptyComponent
   ]
 })
 export class PagesModule { }

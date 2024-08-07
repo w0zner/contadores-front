@@ -18,12 +18,12 @@ const routes: Routes = [
       {path: 'perfil', component: PerfilComponent},
 
       //Rutas admin
-      {path: 'usuarios', component:UsuariosComponent, canActivate: [adminGuard],},
-      {path: 'nuevo-documento', component:NuevoDocumentoComponent},
-      {path: 'documentos', component:DocumentosComponent},
+      {path: 'usuarios', component:UsuariosComponent, canActivate: [adminGuard]},
+      {path: 'nuevo-documento', component:NuevoDocumentoComponent, canActivate: [adminGuard]},
+      {path: 'documentos', component:DocumentosComponent, canActivate: [adminGuard]},
       {path: 'documentos/:id', component:ArchivosComponent},
       {path: 'documentos/mis-documentos/:id', component:MisDocumentosComponent},
-      { path: 'temporary-route', component: EmptyComponent }  // Ruta temporal
+      {path: 'temporary-route', component: EmptyComponent}  // Ruta temporal
     ]}
 ];
 

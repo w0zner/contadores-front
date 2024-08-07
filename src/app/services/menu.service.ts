@@ -1,18 +1,16 @@
 import { Injectable } from '@angular/core';
-import { UsuarioService } from './usuario.service';
+import { LocalStorageService } from './local-storage.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MenuService {
 
-  //public menu: any[] = []
-
-  constructor(private usuarioService: UsuarioService) { }
+  constructor(private localStorageService: LocalStorageService) { }
 
   cargarMenu(): any {
-    const usuarioLogueado = this.usuarioService.getUserLogged()
-    const menuBackend = JSON.parse(localStorage.getItem('menu') ?? '') || []
+    const usuarioLogueado = this.localStorageService.getItem('user', false)
+    const menuBackend = this.localStorageService.getItem('menu', true)
 
     let menu = menuBackend.map((item: any) => {
       if(item.titulo === 'Mis Documentos') {

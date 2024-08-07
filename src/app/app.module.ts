@@ -12,11 +12,12 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { PagesModule } from './pages/pages.module';
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    RegistroComponent
+    RegistroComponent,
   ],
   imports: [
     BrowserModule,
@@ -25,7 +26,7 @@ import { PagesModule } from './pages/pages.module';
     ReactiveFormsModule,
     HttpClientModule,
     NgxPaginationModule,
-    PagesModule
+    PagesModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

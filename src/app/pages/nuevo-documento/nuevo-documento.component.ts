@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Route, Router } from '@angular/router';
 import { Usuarios } from 'src/app/models/usuarios.model';
+import { AlertMessageService } from 'src/app/services/alert-message.service';
 import { DocumentosService } from 'src/app/services/documentos.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
-import Swal from 'sweetalert2'
 
 @Component({
   selector: 'app-nuevo-documento',
@@ -16,13 +16,9 @@ export class NuevoDocumentoComponent implements OnInit {
   public nuevoDocumentoForm: FormGroup
   public usuarios: Usuarios[] = []
   public formSubmit = false
-  private userLoggedUID: string | undefined
   public usuario: Usuarios | undefined
 
-  constructor(private fb: FormBuilder, private usuariosService: UsuarioService, private documentosService: DocumentosService, private router: Router){
-    this.userLoggedUID = this.usuariosService.getUserLogged()
-    this.obtenerUsuario()
-
+  constructor(private fb: FormBuilder, private usuariosService: UsuarioService, private documentosService: DocumentosService, private alertMessageService: AlertMessageService, private router: Router){
     this.nuevoDocumentoForm= this.fb.group({
       nombre: ['', Validators.required],
       estado: ['LISTO'],
@@ -34,7 +30,7 @@ export class NuevoDocumentoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.cargarUsusarios()
+     this.cargarUsusarios()
 
     this.nuevoDocumentoForm.patchValue({
       usuarioCreacion: this.usuario?.uid
@@ -43,8 +39,8 @@ export class NuevoDocumentoComponent implements OnInit {
 
   cargarUsusarios() {
     this.usuariosService.cargarUsuarios().subscribe({
-      next: (resp) => {
-        this.usuarios = resp
+      next: (response) => {
+        this.usuarios = response
       }
     })
   }
@@ -62,24 +58,12 @@ export class NuevoDocumentoComponent implements OnInit {
     if(this.nuevoDocumentoForm.invalid) {
       return
     }
+    console.log(this.nuevoDocumentoForm.value)
 
     this.documentosService.crearDocumento(this.nuevoDocumentoForm.value).subscribe({
       next: (resp:any) => {
-        Swal.fire({
-          text: "Datos Guardados",
-          icon: "success",
-          showConfirmButton: false,
-          timer: 800
-        });
+        this.alertMessageService.mensajeFlashConfirmation("Datos Guardados")
         this.router.navigateByUrl(`/dashboard/documentos/${resp.documento._id}`)
-      }
-    })
-  }
-
-  obtenerUsuario() {
-    this.usuariosService.getUsuario(this.userLoggedUID || '').subscribe({
-      next: (resp) => {
-        this.usuario = resp
       }
     })
   }

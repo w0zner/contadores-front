@@ -6,6 +6,7 @@ import { Documentos } from 'src/app/models/documentos.model';
 import { Usuarios } from 'src/app/models/usuarios.model';
 import { BuscarService } from 'src/app/services/buscar.service';
 import { DocumentosService } from 'src/app/services/documentos.service';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import Swal from 'sweetalert2'
 
@@ -17,6 +18,7 @@ import Swal from 'sweetalert2'
 export class DocumentosComponent implements OnInit {
 
   @ViewChild('fileInput') fileInput:ElementRef | undefined;
+
   public actualizacionDocumentoForm: FormGroup
   public documentos: Documentos[] = []
   public usuarios: Usuarios[] = []
@@ -25,7 +27,7 @@ export class DocumentosComponent implements OnInit {
   public cambioDeUsuario: boolean = false
   formSubmit = false
   private subscription: Subscription | undefined;
-  private userLogged: any
+  private usuarioLogueadoID: any
 
   facturas: Documentos[] = [];
   informes: Documentos[] = [];
@@ -35,17 +37,15 @@ export class DocumentosComponent implements OnInit {
   pf: number = 1;
   pi: number = 1;
 
-  constructor(private buscarService: BuscarService, private documentosService: DocumentosService, private fb: FormBuilder, private router: Router, private usuariosService: UsuarioService) {
+  constructor(private buscarService: BuscarService, private localStorageService: LocalStorageService, private documentosService: DocumentosService, private fb: FormBuilder, private router: Router, private usuariosService: UsuarioService) {
     this.actualizacionDocumentoForm = fb.group({
       _id: [''],
       nombre: ['', Validators.required],
       fecha: [''],
       estado: [''],
-      usuario: [null],
+      usuario: [''],
       observacion: ['']
     })
-
-    this.userLogged = this.usuariosService.getUserLogged()
   }
 
   ngOnInit(): void {
@@ -54,6 +54,7 @@ export class DocumentosComponent implements OnInit {
         this.reloadComponent(); // Lógica para recargar los datos o el componente
       }
     });
+    this.usuarioLogueadoID = this.localStorageService.getItem('user', false)
     this.cargarDocumentos()
     this.cargarUsusarios()
   }
@@ -71,8 +72,8 @@ export class DocumentosComponent implements OnInit {
 
   cargarUsusarios() {
     this.usuariosService.cargarUsuarios().subscribe({
-      next: (resp) => {
-        this.usuarios = resp
+      next: (response) => {
+        this.usuarios = response
       }
     })
   }
@@ -93,6 +94,12 @@ export class DocumentosComponent implements OnInit {
       this.buscarService.buscarTermino('documentos', termino).subscribe({
         next: (resp: any[]) => {
           this.documentos = resp
+          console.log(this.documentos)
+
+          this.facturas = this.documentos.filter(doc => doc.tipo === 'FACTURA');
+          this.informes = this.documentos.filter(doc => doc.tipo === 'INFORME');
+          console.log(this.facturas)
+          console.log(this.informes)
         }
       })
     } else {
@@ -108,19 +115,18 @@ export class DocumentosComponent implements OnInit {
     }
   }
 
-  editarDocumento(id: string) {
+  seleccionarDocumento(id: string) {
     this.documento = this.documentos.filter(doc => doc._id === id)
-    //this.usuario = this.documento[0].usuario.nombre
-    //this.usuarios = this.usuarios.filter(user => user.uid !== this.documento[0].usuario._id)
     this.actualizacionDocumentoForm.patchValue({
       _id: this.documento[0]._id,
       nombre: this.documento[0].nombre,
       fecha: this.documento[0].fecha,
       estado: this.documento[0].estado,
       observacion: this.documento[0].observacion,
+      usuario: this.documento[0].usuario
       //usuario: new Usuarios(this.documento[0].usuario.nombre, '', '', '', '', '', 'USER_ROLE', this.documento[0].usuario._id)
     })
-    this.actualizacionDocumentoForm.get('usuario')?.setValue(this.documento[0].usuario);
+    //this.actualizacionDocumentoForm.get('usuario')?.setValue(this.documento[0].usuario);
     console.log(this.actualizacionDocumentoForm.value)
   }
 
@@ -204,7 +210,7 @@ export class DocumentosComponent implements OnInit {
   }
 
   mostrarControlesEdicion(documento: any): boolean {
-    return this.userLogged === documento.usuarioCreacion?._id ? true : false
+    return this.usuarioLogueadoID === documento.usuarioCreacion?._id ? true : false
   }
 
   cambioEstado(documento: any) {
