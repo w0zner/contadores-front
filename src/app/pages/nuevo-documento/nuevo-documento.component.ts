@@ -40,7 +40,7 @@ export class NuevoDocumentoComponent implements OnInit {
   cargarUsusarios() {
     this.usuariosService.cargarUsuarios().subscribe({
       next: (response) => {
-        this.usuarios = response
+        this.usuarios = response.filter((user) => user.role !== 'ADMIN_ROLE')
       }
     })
   }
@@ -58,7 +58,6 @@ export class NuevoDocumentoComponent implements OnInit {
     if(this.nuevoDocumentoForm.invalid) {
       return
     }
-    console.log(this.nuevoDocumentoForm.value)
 
     this.documentosService.crearDocumento(this.nuevoDocumentoForm.value).subscribe({
       next: (resp:any) => {

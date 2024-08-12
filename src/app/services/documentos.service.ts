@@ -24,7 +24,6 @@ export class DocumentosService {
       map((resp) => {
         const documentos = resp.documentos
             .map(doc => new Documentos(doc.nombre, doc.estado, doc.tipo, doc.usuarioCreacion, doc.observacion, doc.usuario, doc.fecha, doc.pdf, doc._id))
-            console.log("DOCUMENRT ", resp )
         return documentos
       })
     )
@@ -35,7 +34,6 @@ export class DocumentosService {
       .pipe(
         map((resp)=> {
           const documentos = resp.documentos.map(doc => new Documentos(doc.nombre, doc.estado, doc.tipo, doc.usuarioCreacion, doc.observacion, doc.usuario, doc.fecha, doc.pdf, doc._id))
-          console.log("DOCUMENTG ", resp )
           return documentos
         })
       )

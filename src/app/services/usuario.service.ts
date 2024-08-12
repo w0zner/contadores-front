@@ -21,7 +21,6 @@ export class UsuarioService {
         .pipe(
           map((resp) => {
             const usuarios = resp.usuarios.map(user => new Usuarios(user.nombre, user.email, user.curp, user.telefono, user.estado, '', '', user.role, user.uid))
-            console.log(resp)
             return usuarios
           })
         )

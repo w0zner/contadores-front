@@ -29,7 +29,6 @@ export class UsuariosComponent implements OnInit{
     this.usuarioService.cargarUsuarios().subscribe({
       next: (resp:any) => {
         this.usuarios = resp
-        console.log(resp)
       }
     })
   }
@@ -52,7 +51,7 @@ export class UsuariosComponent implements OnInit{
         this.alertMessageService.mensajeCortoExitosoOk(resp.msg)
       },
       error: (error) => {
-        this.alertMessageService.mensajeErrorOk("Oops...", "Ocurrio un error al actualizar el usuario")
+        this.alertMessageService.mensajeErrorOk(error.status, "Oops...", "Ocurrio un error al actualizar el usuario")
       }
     })
   }
@@ -60,29 +59,22 @@ export class UsuariosComponent implements OnInit{
   eliminarUsuario(id: string) {
     Swal.fire({
       title: "Confirma la acción?",
-      text: "Confirma que desea eliminar el usuario?",
+      text: "Confirma que desea eliminar el usuario",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#06d79c",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Si, eliminar",
+      confirmButtonColor: "#745af2",
+      cancelButtonColor: "#ef5350",
+      confirmButtonText: "Eliminar",
       cancelButtonText: "Cancelar"
     }).then((result) => {
       if (result.isConfirmed) {
         this.usuarioService.eliminarUsuario(id).subscribe({
           next: (resp: any) => {
-            Swal.fire({
-              text: resp.msg,
-              icon: "success"
-            });
+            this.alertMessageService.mensajeCortoExitosoOk(resp.msg)
             this.cargarUsuarios()
           },
           error: (error) => {
-            Swal.fire({
-              icon: "error",
-              title: "Oops...",
-              text: "Ocurrio un error al eliminar el usuario",
-            });
+            this.alertMessageService.mensajeErrorOk(error.status, "Oops...", error.msg)
           }
         })
       }

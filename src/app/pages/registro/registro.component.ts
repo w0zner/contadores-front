@@ -39,7 +39,7 @@ export class RegistroComponent {
         this.router.navigateByUrl('/login')
       },
       error: (error) => {
-        this.alertMessageService.mensajeErrorOk("Oops...", error.error.msg)
+        this.alertMessageService.mensajeErrorOk(error.status, "Oops...", error.error.msg)
       }
     })
   }

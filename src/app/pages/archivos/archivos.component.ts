@@ -94,10 +94,8 @@ export class ArchivosComponent implements OnInit {
             next: (resp) => {
               if(resp.tipo !== 'INFORME') {
                 resp.estado = 'PENDIENTE'
-                console.log(resp)
                 this.documentosService.editarDocumento(resp).subscribe({
                   next: (response) => {
-                    console.log("documento con estado actualizado")
                     this.obtenerRolUsuario()
                   }
                 })
@@ -108,7 +106,7 @@ export class ArchivosComponent implements OnInit {
           })
         })
         .catch(error => {
-          this.alertMessageService.mensajeErrorOk("Oops...",  "Ocurrio un error al subir el archivo")
+          this.alertMessageService.mensajeErrorOk(error.status, "Oops...",  "Ocurrio un error al subir el archivo")
         })
     }
   }

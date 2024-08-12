@@ -2,8 +2,8 @@
   <div class="col-12">
       <div class="card">
           <div class="card-body">
-              <input type="text" class="form-control" placeholder="Buscar Factura"
-                      #txtTermino (keyup)="buscar( txtTermino.value )" />
+              <input type="text" class="form-control" placeholder="Buscar Documentos"
+                      #txtTermino (keyup)="buscar( 'facturas',txtTermino.value )" />
           </div>
       </div>
   </div>
@@ -17,12 +17,12 @@
           <ul class="nav nav-tabs profile-tab" role="tablist">
               <li class="nav-item" role="presentation">
                 <a class="nav-link active" data-toggle="tab" data-target="#profile" href="#" role="tab">
-                  <div class="font-weight-normal">Historial de facturas</div>
+                  <div class="font-weight-normal">Historial de facturas  <span class="badge badge-primary">{{facturas.length}}</span></div>
                 </a>
               </li>
               <li class="nav-item" role="presentation">
                 <a class="nav-link" data-toggle="tab" data-target="#informes" href="#" role="tab">
-                  <div class="font-weight-normal">Historial de informes</div>
+                  <div class="font-weight-normal">Historial de informes  <span class="badge badge-primary">{{informes.length}}</span></div>
                 </a>
               </li>
           </ul>
@@ -139,9 +139,12 @@
                                       <a data-toggle="tooltip" data-original-title="archivo" class="cursor" (click)="editarArchivo(documento._id || '')" style="padding-left: 10px;" *ngIf="mostrarControlesEdicion(documento)">
                                           <i class="fa fa-file-o"></i>
                                       </a>
-                                      <a data-toggle="tooltip" data-original-title="archivo" class="cursor" style="padding-left: 10px;" >
-                                        <span class="mdi mdi-comment-outline"></span>
-                                    </a>
+                                      <a data-toggle="modal"  data-target=".modal-obs" class="cursor" (click)="seleccionarDocumento(documento._id || '')" style="padding-left: 10px;" title="Observación" >
+                                        <span class="mdi" [ngClass]="{
+                                          'mdi-comment-outline': documento.observacion=== '' || documento.observacion=== undefined,
+                                          'mdi-comment': documento.observacion !== '' && documento.observacion !== undefined
+                                        }"></span>
+                                      </a>
                                   </td>
                               </tr>
                           </tbody>
@@ -166,7 +169,7 @@
               <h4 class="modal-title" id="myLargeModalLabel">Modificar datos del documento</h4>
               <button type="button" class="close" #fileInput data-dismiss="modal" aria-hidden="true">×</button>
           </div>
-          <div class="card">
+          <div class="card m-b-0" style="border-radius: 5px;">
               <form [formGroup]="actualizacionDocumentoForm"
               (submit)="actualizarDocumento()"
                  >
@@ -176,11 +179,9 @@
                           <div class="col-md-6">
                               <div class="form-group">
                                   <label class="control-label">Nombre del documento</label>
-                                  <input type="text"  class="form-control" formControlName="nombre" placeholder="Brenda Torres" >
-                              </div>
-                              <div class="row">
+                                  <input type="text"  class="form-control" formControlName="nombre">
                                   <div class="col text-danger">
-                                      <p *ngIf="campoNoValido('nombre');"> Agregue un nombre</p>
+                                    <p *ngIf="campoNoValido('nombre');"> Agregue un nombre</p>
                                   </div>
                               </div>
                           </div>
@@ -190,6 +191,9 @@
                             <div class="form-group">
                                 <label class="control-label">Fecha</label>
                                 <input class="form-control" type="date"  id="example-date-input" formControlName="fecha">
+                                <div class="col text-danger">
+                                  <p *ngIf="campoNoValido('fecha');"> Agregue una fecha</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -211,10 +215,13 @@
                           </div>
                       </div>
                   </div> -->
-                      <div class="form-actions">
+                      <!-- <div class="form-actions">
                           <button  class="btn btn-success"> <i class="fa fa-check" ></i> Guardar </button>
-                      </div>
+                      </div> -->
                   </div>
+              </div>
+              <div class="card-footer d-flex justify-content-end">
+                <button class="btn btn-primary m-1"><i class="fa fa-check" ></i> Guardar</button>
               </div>
               </form>
       </div>
@@ -228,9 +235,9 @@
       <div class="modal-content">
           <div class="modal-header">
               <h4 class="modal-title" id="myLargeModalLabel">Agregar Observación al documento</h4>
-              <button type="button" class="close" #fileInput data-dismiss="modal" aria-hidden="true">×</button>
+              <button type="button" class="close" #modalObs data-dismiss="modal" aria-hidden="true">×</button>
           </div>
-          <div class="card">
+          <div class="card m-b-0" style="border-radius: 5px;">
               <form [formGroup]="actualizacionDocumentoForm"
               (submit)="actualizarObsercion()"
                  >
@@ -242,19 +249,15 @@
                                 <label for="observacion">Observación</label>
                                 <textarea class="form-control" formControlName="observacion" rows="3"></textarea>
                               </div>
-                              <div class="row">
-                                  <div class="col text-danger">
-                                      <p *ngIf="campoNoValido('nombre');"> Agregue un nombre</p>
-                                  </div>
-                              </div>
                           </div>
-
                       </div>
-
-                      <div class="form-actions">
+                     <!--  <div class="form-actions">
                           <button  class="btn btn-success"> <i class="fa fa-check" ></i> Guardar </button>
-                      </div>
+                      </div> -->
                   </div>
+              </div>
+              <div class="card-footer d-flex justify-content-end">
+                <button class="btn btn-primary m-1"><i class="fa fa-check" ></i> Guardar</button>
               </div>
               </form>
       </div>

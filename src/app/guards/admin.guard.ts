@@ -18,13 +18,4 @@ export const adminGuard: CanActivateFn = (route, state) => {
       }
     })
   )
-   /*authService.refreshToken()
-  .pipe(
-    tap(isLogged => {
-      console.log("guard", isLogged)
-      if(!isLogged) {
-        router.navigateByUrl('/login')
-      }
-    })
-  )*/
 };

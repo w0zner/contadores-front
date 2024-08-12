@@ -11,19 +11,18 @@
           <div class="tab-pane active" id="profile" role="tabpanel">
                 <div class="card-body">
                   <form class="form-material m-t-10"  (submit)="crearNuevoDocumento();" [formGroup]="nuevoDocumentoForm">
+                    <div class="form-group m-b-3">
+                      <label for="nombre">Tipo documento</label>
+                      <span class="badge badge-warning m-l-5 p-2">Informe</span>
+                      <!-- <input type="text" class="form-control form-control-line" value="Informe"> -->
+                    </div>
                       <div class="form-group">
                           <label for="nombre">Nombre del documento</label>
-                          <input type="text" class="form-control form-control-line" placeholder=""
-                          formControlName="nombre">
+                          <input type="text" class="form-control form-control-line" formControlName="nombre">
                           <div class="col text-danger">
                               <p *ngIf="campoNoValido('nombre');"> Agregue el nombre a su documento</p>
                           </div>
                       </div>
-                      <div class="form-group">
-                        <label for="nombre">Tipo</label>
-                        <span class="badge badge-warning m-l-5 p-2">Informe</span>
-                        <!-- <input type="text" class="form-control form-control-line" value="Informe"> -->
-                    </div>
                       <div class="form-group">
                           <label>Elija el cliente a quien se le añadirá el archivo</label>
                           <select class="form-control" formControlName="usuario">
@@ -45,7 +44,7 @@
                       </div>
                       <div class="form-group row">
                           <div class="col-sm-12">
-                              <button type="submit" class="btn btn-primary">Guardar Datos</button>
+                              <button type="submit" class="btn btn-primary"><i class="fa fa-check" ></i> Guardar Datos</button>
                           </div>
                       </div>
                   </form>

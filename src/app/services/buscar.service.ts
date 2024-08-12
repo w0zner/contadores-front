@@ -39,7 +39,7 @@ export class BuscarService {
 
   private obtenerDocumentos(resultados: any[]): Documentos[] {
     return resultados.map(
-      doc => new Documentos(doc.nombre, doc.usuario, doc.fecha, doc.pdf, doc._id)
+      doc => new Documentos(doc.nombre, doc.estado, doc.tipo, doc.usuarioCreacion, doc.usuario, doc.fecha, doc.pdf, doc._id)
     )
   }
 }

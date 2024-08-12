@@ -4,6 +4,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Documentos } from 'src/app/models/documentos.model';
 import { Usuarios } from 'src/app/models/usuarios.model';
+import { AlertMessageService } from 'src/app/services/alert-message.service';
 import { BuscarService } from 'src/app/services/buscar.service';
 import { DocumentosService } from 'src/app/services/documentos.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
@@ -18,6 +19,7 @@ import Swal from 'sweetalert2'
 export class DocumentosComponent implements OnInit {
 
   @ViewChild('fileInput') fileInput:ElementRef | undefined;
+  @ViewChild('modalObs') modalObs:ElementRef | undefined;
 
   public actualizacionDocumentoForm: FormGroup
   public documentos: Documentos[] = []
@@ -37,7 +39,14 @@ export class DocumentosComponent implements OnInit {
   pf: number = 1;
   pi: number = 1;
 
-  constructor(private buscarService: BuscarService, private localStorageService: LocalStorageService, private documentosService: DocumentosService, private fb: FormBuilder, private router: Router, private usuariosService: UsuarioService) {
+  constructor(
+    private buscarService: BuscarService,
+    private localStorageService: LocalStorageService,
+    private documentosService: DocumentosService,
+    private fb: FormBuilder,
+    private router: Router,
+    private usuariosService: UsuarioService,
+    private alertMessageService: AlertMessageService) {
     this.actualizacionDocumentoForm = fb.group({
       _id: [''],
       nombre: ['', Validators.required],
@@ -89,19 +98,30 @@ export class DocumentosComponent implements OnInit {
     })
   }
 
-  buscar(termino: string) {
+  buscar(lista: string, termino: string) {
     if(termino.length > 0) {
-      this.buscarService.buscarTermino('documentos', termino).subscribe({
-        next: (resp: any[]) => {
-          this.documentos = resp
-          console.log(this.documentos)
+      if(lista === 'facturas') {
+        this.buscarService.buscarTermino('documentos', termino).subscribe({
+          next: (resp: any[]) => {
+            this.documentos = resp
 
-          this.facturas = this.documentos.filter(doc => doc.tipo === 'FACTURA');
-          this.informes = this.documentos.filter(doc => doc.tipo === 'INFORME');
-          console.log(this.facturas)
-          console.log(this.informes)
-        }
-      })
+            this.facturas = this.documentos.filter(doc => doc.tipo === 'FACTURA');
+            this.informes = this.documentos.filter(doc => doc.tipo === 'INFORME');
+          }
+        })
+      } else {
+        this.buscarService.buscarTermino('documentos', termino).subscribe({
+          next: (resp: any[]) => {
+            this.documentos = resp
+            console.log(this.documentos)
+
+            this.facturas = this.documentos.filter(doc => doc.tipo === 'FACTURA');
+            this.informes = this.documentos.filter(doc => doc.tipo === 'INFORME');
+            console.log(this.facturas)
+            console.log(this.informes)
+          }
+        })
+      }
     } else {
       this.cargarDocumentos()
     }
@@ -124,10 +144,7 @@ export class DocumentosComponent implements OnInit {
       estado: this.documento[0].estado,
       observacion: this.documento[0].observacion,
       usuario: this.documento[0].usuario
-      //usuario: new Usuarios(this.documento[0].usuario.nombre, '', '', '', '', '', 'USER_ROLE', this.documento[0].usuario._id)
     })
-    //this.actualizacionDocumentoForm.get('usuario')?.setValue(this.documento[0].usuario);
-    console.log(this.actualizacionDocumentoForm.value)
   }
 
   actualizarDocumento() {
@@ -143,21 +160,15 @@ export class DocumentosComponent implements OnInit {
     //doc.usuario = this.actualizacionDocumentoForm.get('usuario')?.value
     this.documentosService.editarDocumento(doc).subscribe({
       next: (resp) => {
-        Swal.fire({
-          text: "Documento actualizado exitosamente!",
-          icon: "success"
-        });
+        this.alertMessageService.mensajeCortoExitosoOk("Datos Guardados")
+
         this.fileInput?.nativeElement.click();
         this.router.navigate(['/dashboard/temporary-route'], { skipLocationChange: true }).then(() => {
           this.router.navigateByUrl(`/dashboard/documentos`);
         });
       },
       error: (error) => {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "Ocurrio un error al actualizar el documento",
-        });
+        this.alertMessageService.mensajeErrorOk(error.status, "Oops...", error.msg)
       }
     })
   }
@@ -169,32 +180,25 @@ export class DocumentosComponent implements OnInit {
   eliminarDocumento(id: string) {
     Swal.fire({
       title: "Confirma la acción?",
-      text: "Confirma que desea eliminar el documento?",
+      text: "Confirma que desea eliminar el documento",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#06d79c",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Si, eliminar",
+      confirmButtonColor: "#745af2",
+      cancelButtonColor: "#ef5350",
+      confirmButtonText: "Eliminar",
       cancelButtonText: "Cancelar"
     }).then((result) => {
       if (result.isConfirmed) {
         this.documentosService.eliminarDocumento(id).subscribe({
           next: (resp: any) => {
-            Swal.fire({
-              text: resp.msg,
-              icon: "success"
-            });
+            this.alertMessageService.mensajeCortoExitosoOk("Datos Guardados")
 
             this.router.navigate(['/dashboard/temporary-route'], { skipLocationChange: true }).then(() => {
               this.router.navigateByUrl(`/dashboard/documentos`);
             });
           },
           error: (error) => {
-            Swal.fire({
-              title: "Oops...",
-              icon: "error",
-              text: error.msg,
-            });
+            this.alertMessageService.mensajeErrorOk(error.status, "Oops...", error.msg)
           }
         })
       }
@@ -214,50 +218,33 @@ export class DocumentosComponent implements OnInit {
   }
 
   cambioEstado(documento: any) {
-    console.log(documento)
     this.documentosService.editarDocumento(documento).subscribe({
       next: (resp) => {
-        console.log(resp)
-        Swal.fire({
-          text: "Documento actualizado exitosamente!",
-          icon: "success"
-        });
-        this.fileInput?.nativeElement.click();
+        this.alertMessageService.mensajeCortoExitosoOk("Datos Guardados")
+
         this.router.navigate(['/dashboard/temporary-route'], { skipLocationChange: true }).then(() => {
           this.router.navigateByUrl(`/dashboard/documentos`);
         });
       },
       error: (error) => {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "Ocurrio un error al actualizar el documento",
-        });
+        this.alertMessageService.mensajeErrorOk(error.status, "Oops...", error.msg)
       }
     })
   }
 
   actualizarObsercion() {
-    console.log(this.actualizacionDocumentoForm.value)
-
     this.documentosService.editarDocumento(this.actualizacionDocumentoForm.value).subscribe({
       next: (resp) => {
         console.log(resp)
-        Swal.fire({
-          text: "Documento actualizado exitosamente!",
-          icon: "success"
-        });
-        this.fileInput?.nativeElement.click();
+        this.alertMessageService.mensajeCortoExitosoOk("Datos Guardados")
+
+        this.modalObs?.nativeElement.click();
         this.router.navigate(['/dashboard/temporary-route'], { skipLocationChange: true }).then(() => {
           this.router.navigateByUrl(`/dashboard/documentos`);
         });
       },
       error: (error) => {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "Ocurrio un error al actualizar el documento",
-        });
+        this.alertMessageService.mensajeErrorOk(error.status, "Oops...", error.msg)
       }
     })
   }

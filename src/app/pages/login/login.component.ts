@@ -34,7 +34,7 @@ export class LoginComponent {
         this.router.navigateByUrl('/dashboard/perfil')
       },
       error: (error)=> {
-        this.alertMessageService.mensajeErrorOk("Oops...", error.error.msg)
+        this.alertMessageService.mensajeErrorOk(error.status, "Oops...", error.error.msg)
       }
     })
   }

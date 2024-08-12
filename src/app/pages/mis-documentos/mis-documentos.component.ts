@@ -118,7 +118,7 @@ export class MisDocumentosComponent implements OnInit{
         });
       },
       error: (error) => {
-        this.alertMessageService.mensajeErrorOk("Oops...", "Ocurrio un error al actualizar el documento")
+        this.alertMessageService.mensajeErrorOk(error.status, "Oops...", "Ocurrio un error al actualizar el documento")
       }
     })
   }
@@ -130,12 +130,12 @@ export class MisDocumentosComponent implements OnInit{
   eliminarDocumento(id: string) {
     Swal.fire({
       title: "Confirma la acción?",
-      text: "Confirma que desea eliminar el documento?",
+      text: "Confirma que desea eliminar el documento",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#06d79c",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Si, eliminar",
+      confirmButtonColor: "#745af2",
+      cancelButtonColor: "#ef5350",
+      confirmButtonText: "Eliminar",
       cancelButtonText: "Cancelar"
     }).then((result) => {
       if (result.isConfirmed) {
@@ -148,14 +148,22 @@ export class MisDocumentosComponent implements OnInit{
             });
           },
           error: (error) => {
-            this.alertMessageService.mensajeErrorOk("Oops...", error.msg)
+            this.alertMessageService.mensajeErrorOk(error.status, "Oops...", error.msg)
           }
         })
       }
     });
   }
 
-  campoNoValido(campo: string):boolean {
+  campoNoValidoNuevoDoc(campo: string):boolean {
+    if(this.nuevoDocumentoForm.get(campo)?.invalid && this.formSubmit) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  campoNoValidoActualizacion(campo: string):boolean {
     if(this.actualizacionDocumentoForm.get(campo)?.invalid && this.formSubmit) {
       return true;
     } else {
