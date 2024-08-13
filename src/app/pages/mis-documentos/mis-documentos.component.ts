@@ -7,6 +7,7 @@ import { AlertMessageService } from 'src/app/services/alert-message.service';
 import { DocumentosService } from 'src/app/services/documentos.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 import Swal from 'sweetalert2'
+import { NewDocumentoComponent } from '../modals/new-documento/new-documento.component';
 
 @Component({
   selector: 'app-mis-documentos',
@@ -27,6 +28,8 @@ export class MisDocumentosComponent implements OnInit{
   private usuarioLogueadoID: string
   private subscription: Subscription | undefined;
   p: number = 1;
+
+  @ViewChild('modalNewDocument') modalNewDocument!: NewDocumentoComponent
 
   constructor(
     private activatedRouted: ActivatedRoute,
@@ -50,6 +53,20 @@ export class MisDocumentosComponent implements OnInit{
       usuario: [this.usuarioLogueadoID, Validators.required],
       fecha: ['', Validators.required]
     })
+  }
+
+  editar(documento: any) {
+    this.modalNewDocument.usuarioLogueadoID = this.usuarioLogueadoID
+    this.modalNewDocument.titulo = "Modificar datos del documento"
+    this.modalNewDocument.data = documento
+    this.modalNewDocument.tipo = "UPDATE"
+    this.modalNewDocument.openModal();
+  }
+
+  nuevo(){
+    this.modalNewDocument.titulo = "Crear documento"
+    this.modalNewDocument.tipo = "INSERT"
+    this.modalNewDocument.openModal();
   }
 
   ngOnInit(): void {
