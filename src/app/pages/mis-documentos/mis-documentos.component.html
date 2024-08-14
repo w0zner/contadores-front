@@ -2,10 +2,6 @@
   <div class="col-lg-12 col-xlg-12 col-md-7">
       <div class="form-group row">
           <div class="col-sm-12">
-                <!-- <a data-toggle="modal" data-target=".modal-nuevo-doc" class="btn btn-primary cursor" role="button" style="color: white;">
-                  <span class="mdi mdi-plus"></span>
-                  Agregar Documento
-                </a> -->
                 <button type="button" class="btn btn-primary cursor" (click)="nuevoDocumento()">
                   <span class="mdi mdi-plus"></span>
                   Agregar Documento
@@ -63,9 +59,6 @@
                                         <button type="button" class="link-button cursor" (click)="editarDocumento(documento)" *ngIf="mostrarControlesEdicion(documento)" role="link" style="background: none; border: none;"  title="Editar" >
                                           <i class="fa fa-pencil text-inverse m-r-10"></i>
                                         </button>
-                                        <!-- <a data-toggle="modal" data-target=".example2-modal-lg" class="cursor" (click)="seleccionarDocumento(documento._id || '')" *ngIf="mostrarControlesEdicion(documento)">
-                                            <i class="fa fa-pencil text-inverse m-r-10"></i>
-                                        </a> -->
                                         <a data-toggle="tooltip" data-original-title="Borrar" class="cursor" (click)="eliminarDocumento(documento._id || '')" *ngIf="mostrarControlesEdicion(documento)" title="Borrar">
                                             <i class="fa fa-close text-danger m-r-10"></i>
                                         </a>
@@ -78,12 +71,6 @@
                                             'mdi-comment': documento.observacion !== '' && documento.observacion !== undefined
                                           }"></span>
                                         </button>
-                                        <!-- <a data-toggle="modal"  data-target=".modal-obs" class="cursor" (click)="seleccionarDocumento(documento._id || '')" style="padding-left: 10px;" title="Observación" >
-                                          <span class="mdi" [ngClass]="{
-                                            'mdi-comment-outline': documento.observacion=== '' || documento.observacion=== undefined,
-                                            'mdi-comment': documento.observacion !== '' && documento.observacion !== undefined
-                                          }"></span>
-                                        </a> -->
                                       </td>
                                   </tr>
                               </tbody>
@@ -101,129 +88,3 @@
 </div>
 
 <app-new-documento #modalNewDocument></app-new-documento>
-
-<!-- <div class="modal fade example2-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
-  <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-          <div class="modal-header">
-              <h4 class="modal-title" id="myLargeModalLabel">Modificar datos del documento</h4>
-              <button type="button" class="close" #fileInput data-dismiss="modal" aria-hidden="true">×</button>
-          </div>
-          <div class="card m-b-0" style="border-radius: 5px;">
-              <form [formGroup]="actualizacionDocumentoForm"
-              (submit)="actualizarDocumento()"
-                 >
-              <div class="card-body">
-                  <div class="form-body">
-                      <div class="row p-t-20">
-                          <div class="col-md-6">
-                              <div class="form-group">
-                                  <label class="control-label">Nombre del documento</label>
-                                  <input type="text"  class="form-control" formControlName="nombre" placeholder="Brenda Torres" >
-                              </div>
-                              <div class="row">
-                                  <div class="col text-danger">
-                                      <p *ngIf="campoNoValidoActualizacion('nombre');"> Agregue un nombre</p>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                      <div class="row p-t-2">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="control-label">Fecha</label>
-                                <input class="form-control" type="date"  id="example-date-input" formControlName="fecha">
-                            </div>
-                        </div>
-                    </div>
-                  </div>
-              </div>
-              <div class="card-footer d-flex justify-content-end">
-                <button class="btn btn-primary m-1"><i class="fa fa-check" ></i> Guardar</button>
-              </div>
-              </form>
-      </div>
-  </div>
-</div>
-</div>
-
-
-
-
-<div class="modal fade modal-nuevo-doc" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
-  <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-          <div class="modal-header">
-              <h4 class="modal-title" id="myLargeModalLabel">Agregar Documento</h4>
-              <button type="button" class="close" #modalClose data-dismiss="modal" aria-hidden="true">×</button>
-          </div>
-          <div class="card m-b-0" style="border-radius: 5px;">
-              <form [formGroup]="nuevoDocumentoForm"
-              (submit)="guardarDocumento()"
-                 >
-              <div class="card-body">
-                  <div class="form-body">
-                      <div class="row p-t-20">
-                          <div class="col-md-6">
-                              <div class="form-group">
-                                  <label class="control-label">Nombre del documento</label>
-                                  <input type="text"  class="form-control" formControlName="nombre" placeholder="" >
-                                  <div class="col text-danger">
-                                    <p *ngIf="campoNoValidoNuevoDoc('nombre');"> Agregue un nombre</p>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                      <div class="row p-t-2">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="control-label">Fecha</label>
-                                <input class="form-control" type="date"  id="example-date-input" formControlName="fecha">
-                                <div class="col text-danger">
-                                  <p *ngIf="campoNoValidoNuevoDoc('fecha');"> Agregue una fecha</p>
-                              </div>
-                            </div>
-                        </div>
-                    </div>
-                  </div>
-              </div>
-              <div class="card-footer d-flex justify-content-end">
-                <button class="btn btn-primary m-1"><i class="fa fa-check" ></i> Guardar</button>
-              </div>
-              </form>
-      </div>
-  </div>
-</div>
-</div>
-
-
-
-<div class="modal fade modal-obs" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
-  <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-          <div class="modal-header">
-              <h4 class="modal-title" id="myLargeModalLabel">Observación sobre el documento</h4>
-              <button type="button" class="close" #fileInput data-dismiss="modal" aria-hidden="true">×</button>
-          </div>
-
-              <form [formGroup]="actualizacionDocumentoForm">
-              <div class="card-body">
-                  <div class="form-body">
-                      <div class="row p-t-5">
-                          <div class="col-md-12">
-                              <div class="form-group">
-                                <label for="observacion">Observación</label>
-                                <textarea class="form-control" formControlName="observacion" rows="3" readonly></textarea>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-              </form>
-
-  </div>
-</div>
-</div> -->
-
-
-
