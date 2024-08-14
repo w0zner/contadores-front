@@ -2,7 +2,7 @@
   <div class="modal-dialog modal-lg">
       <div class="modal-content">
           <div class="modal-header">
-              <h4 class="modal-title" id="myLargeModalLabel">Modificar datos del documento</h4>
+              <h4 class="modal-title" id="myLargeModalLabel">{{ this.titulo }}</h4>
               <button type="button" class="close" (click)="closeModal()">×</button>
           </div>
           <div class="card m-b-0" style="border-radius: 5px;">
@@ -11,18 +11,18 @@
                  >
               <div class="card-body">
                   <div class="form-body">
-                      <div class="row p-t-20">
+                      <div class="row p-t-20" *ngIf="tipo !== 'VIEW' && tipo !== 'VIEWSAVE'">
                           <div class="col-md-6">
                               <div class="form-group">
                                   <label class="control-label">Nombre del documento</label>
-                                  <input type="text"  class="form-control" formControlName="nombre" placeholder="Brenda Torres" >
+                                  <input type="text"  class="form-control" formControlName="nombre" >
                                   <div class="col text-danger">
                                     <p *ngIf="campoNoValido('nombre');"> Agregue un nombre</p>
                                 </div>
                               </div>
                           </div>
                       </div>
-                      <div class="row p-t-2">
+                      <div class="row p-t-2" *ngIf="tipo !== 'VIEW' && tipo !== 'VIEWSAVE'">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Fecha</label>
@@ -32,29 +32,25 @@
                               </div>
                             </div>
                         </div>
-                    </div>
+                      </div>
+                      <div class="row p-t-5" *ngIf="tipo === 'VIEW' || tipo === 'VIEWSAVE'">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                              <label for="observacion">Observación</label>
+                              <textarea class="form-control" formControlName="observacion" rows="3" readonly *ngIf="tipo === 'VIEW'"></textarea>
+                              <textarea class="form-control" formControlName="observacion" rows="3" *ngIf="tipo === 'VIEWSAVE'"></textarea>
+                            </div>
+                        </div>
+                      </div>
                   </div>
               </div>
-              <div class="card-footer d-flex justify-content-end">
-                <button class="btn btn-primary m-1"><i class="fa fa-check" ></i> Guardar</button>
+              <div class="card-footer d-flex justify-content-end" >
+                <button class="btn btn-primary m-1" *ngIf="tipo !== 'VIEW'">
+                  <i class="fa fa-check"></i> Guardar
+                </button>
               </div>
               </form>
       </div>
   </div>
 </div>
 </div>
-
-
-
-<!--  <div class="modal" *ngIf="isVisible">
-  <div class="modal-content">
-    <h2>{{ titulo }}</h2>
-    <form>
-      <div>
-        hola
-      </div>
-      <button type="submit">Save</button>
-    </form>
-    <button (click)="closeModal()">Close</button>
-  </div>
-</div> -->

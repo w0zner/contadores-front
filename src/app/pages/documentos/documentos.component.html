@@ -69,7 +69,7 @@
                                         </a>
                                     </td>
                                     <td class="text-nowrap text-center">
-                                        <a data-toggle="modal" data-target=".example2-modal-lg" class="cursor" (click)="seleccionarDocumento(factura._id || '')" *ngIf="mostrarControlesEdicion(factura)">
+                                        <!--<a data-toggle="modal" data-target=".example2-modal-lg" class="cursor" (click)="seleccionarDocumento(factura._id || '')" *ngIf="mostrarControlesEdicion(factura)">
                                             <i class="fa fa-pencil text-inverse m-r-10"></i>
                                         </a>
                                         <a data-toggle="tooltip" data-original-title="Borrar" class="cursor" (click)="eliminarDocumento(factura._id || '')" *ngIf="mostrarControlesEdicion(factura)">
@@ -78,12 +78,18 @@
                                         <a data-toggle="tooltip" data-original-title="archivo" class="cursor" (click)="editarArchivo(factura._id || '')" style="padding-left: 10px;" *ngIf="mostrarControlesEdicion(factura)">
                                             <i class="fa fa-file-o"></i>
                                         </a>
-                                        <a data-toggle="modal"  data-target=".modal-obs" class="cursor" (click)="seleccionarDocumento(factura._id || '')" style="padding-left: 10px;" title="Observación" >
+                                         <a data-toggle="modal"  data-target=".modal-obs" class="cursor" (click)="seleccionarDocumento(factura._id || '')" style="padding-left: 10px;" title="Observación" >
                                           <span class="mdi" [ngClass]="{
                                             'mdi-comment-outline': factura.observacion=== '' || factura.observacion=== undefined,
                                             'mdi-comment': factura.observacion !== '' && factura.observacion !== undefined
                                           }"></span>
-                                      </a>
+                                        </a> -->
+                                        <button type="button" class="link-button cursor" (click)="mostrarDatosDocumento(factura)" role="link" style="background: none; border: none;" title="Observación">
+                                          <span class="mdi" [ngClass]="{
+                                            'mdi-comment-outline': factura.observacion=== '' || factura.observacion=== undefined,
+                                            'mdi-comment': factura.observacion !== '' && factura.observacion !== undefined
+                                          }"></span>
+                                        </button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -130,21 +136,30 @@
                                       </a>
                                   </td>
                                   <td class="text-nowrap text-center">
-                                      <a data-toggle="modal" data-target=".example2-modal-lg" class="cursor" (click)="seleccionarDocumento(documento._id || '')" *ngIf="mostrarControlesEdicion(documento)">
+                                    <button type="button" class="link-button cursor" (click)="editarDocumento(documento)" *ngIf="mostrarControlesEdicion(documento)" role="link" style="background: none; border: none;"  title="Editar" >
+                                      <i class="fa fa-pencil text-inverse m-r-10"></i>
+                                    </button>
+                                      <!-- <a data-toggle="modal" data-target=".example2-modal-lg" class="cursor" (click)="seleccionarDocumento(documento._id || '')" *ngIf="mostrarControlesEdicion(documento)">
                                           <i class="fa fa-pencil text-inverse m-r-10"></i>
-                                      </a>
+                                      </a> -->
                                       <a data-toggle="tooltip" data-original-title="Borrar" class="cursor" (click)="eliminarDocumento(documento._id || '')" *ngIf="mostrarControlesEdicion(documento)">
-                                          <i class="fa fa-close text-danger"></i>
+                                          <i class="fa fa-close text-danger m-r-10"></i>
                                       </a>
-                                      <a data-toggle="tooltip" data-original-title="archivo" class="cursor" (click)="editarArchivo(documento._id || '')" style="padding-left: 10px;" *ngIf="mostrarControlesEdicion(documento)">
-                                          <i class="fa fa-file-o"></i>
+                                      <a data-toggle="tooltip" data-original-title="archivo" class="cursor" (click)="subirArchivo(documento._id || '')" style="padding-left: 10px;" *ngIf="mostrarControlesEdicion(documento)">
+                                          <i class="fa fa-file-o text-primary m-r-10"></i>
                                       </a>
-                                      <a data-toggle="modal"  data-target=".modal-obs" class="cursor" (click)="seleccionarDocumento(documento._id || '')" style="padding-left: 10px;" title="Observación" >
+                                      <!-- <a data-toggle="modal"  data-target=".modal-obs" class="cursor" (click)="seleccionarDocumento(documento._id || '')" style="padding-left: 10px;" title="Observación" >
                                         <span class="mdi" [ngClass]="{
                                           'mdi-comment-outline': documento.observacion=== '' || documento.observacion=== undefined,
                                           'mdi-comment': documento.observacion !== '' && documento.observacion !== undefined
                                         }"></span>
-                                      </a>
+                                      </a> -->
+                                      <button type="button" class="link-button cursor" (click)="mostrarDatosDocumento(documento)" role="link" style="background: none; border: none;" title="Observación">
+                                        <span class="mdi" [ngClass]="{
+                                          'mdi-comment-outline': documento.observacion=== '' || documento.observacion=== undefined,
+                                          'mdi-comment': documento.observacion !== '' && documento.observacion !== undefined
+                                        }"></span>
+                                      </button>
                                   </td>
                               </tr>
                           </tbody>
@@ -161,8 +176,10 @@
   </div>
 </div>
 
-<!-- sample modal content -->
-<div class="modal fade example2-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+<app-new-documento #modalNewDocument></app-new-documento>
+
+
+<!-- <div class="modal fade example2-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
   <div class="modal-dialog modal-lg">
       <div class="modal-content">
           <div class="modal-header">
@@ -197,7 +214,7 @@
                             </div>
                         </div>
                     </div>
-                   <!--  <div class="row p-t-2">
+                     <div class="row p-t-2">
                       <div class="col-md-6">
                           <div class="form-group">
                             <div class="input-group is-invalid">
@@ -214,10 +231,10 @@
                               </select>
                           </div>
                       </div>
-                  </div> -->
-                      <!-- <div class="form-actions">
+                  </div>
+                       <div class="form-actions">
                           <button  class="btn btn-success"> <i class="fa fa-check" ></i> Guardar </button>
-                      </div> -->
+                      </div>
                   </div>
               </div>
               <div class="card-footer d-flex justify-content-end">
@@ -229,7 +246,7 @@
 </div>
 </div>
 
-<!-- sample modal content -->
+
 <div class="modal fade modal-obs" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
   <div class="modal-dialog modal-lg">
       <div class="modal-content">
@@ -251,9 +268,7 @@
                               </div>
                           </div>
                       </div>
-                     <!--  <div class="form-actions">
-                          <button  class="btn btn-success"> <i class="fa fa-check" ></i> Guardar </button>
-                      </div> -->
+
                   </div>
               </div>
               <div class="card-footer d-flex justify-content-end">
@@ -263,4 +278,4 @@
       </div>
   </div>
 </div>
-</div>
+</div> -->

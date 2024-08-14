@@ -1,15 +1,12 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NavigationEnd, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import {  Router } from '@angular/router';
 import { Documentos } from 'src/app/models/documentos.model';
-import { Usuarios } from 'src/app/models/usuarios.model';
 import { AlertMessageService } from 'src/app/services/alert-message.service';
 import { BuscarService } from 'src/app/services/buscar.service';
 import { DocumentosService } from 'src/app/services/documentos.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
-import { UsuarioService } from 'src/app/services/usuario.service';
 import Swal from 'sweetalert2'
+import { NewDocumentoComponent } from '../modals/new-documento/new-documento.component';
 
 @Component({
   selector: 'app-documentos',
@@ -18,73 +15,35 @@ import Swal from 'sweetalert2'
 })
 export class DocumentosComponent implements OnInit {
 
-  @ViewChild('fileInput') fileInput:ElementRef | undefined;
-  @ViewChild('modalObs') modalObs:ElementRef | undefined;
+  //public usuarios: Usuarios[] = []
 
-  public actualizacionDocumentoForm: FormGroup
-  public documentos: Documentos[] = []
-  public usuarios: Usuarios[] = []
-  public documento: any
-  public usuario: any
-  public cambioDeUsuario: boolean = false
-  formSubmit = false
-  private subscription: Subscription | undefined;
-  private usuarioLogueadoID: any
+  //public usuario: any
+  //public cambioDeUsuario: boolean = false
 
+  @ViewChild('modalNewDocument') modalNewDocument!: NewDocumentoComponent
+
+  documentos: Documentos[] = []
+  documento: any
   facturas: Documentos[] = [];
   informes: Documentos[] = [];
-
-  public estados: string[] = ['PENDIENTE', 'LISTO', 'RECHAZADO'];
-
+  estados: string[] = ['PENDIENTE', 'LISTO', 'RECHAZADO'];
   pf: number = 1;
   pi: number = 1;
+  private usuarioLogueadoID: any
 
   constructor(
     private buscarService: BuscarService,
     private localStorageService: LocalStorageService,
     private documentosService: DocumentosService,
-    private fb: FormBuilder,
     private router: Router,
-    private usuariosService: UsuarioService,
     private alertMessageService: AlertMessageService) {
-    this.actualizacionDocumentoForm = fb.group({
-      _id: [''],
-      nombre: ['', Validators.required],
-      fecha: [''],
-      estado: [''],
-      usuario: [''],
-      observacion: ['']
-    })
+
   }
 
   ngOnInit(): void {
-    this.subscription = this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        this.reloadComponent(); // Lógica para recargar los datos o el componente
-      }
-    });
     this.usuarioLogueadoID = this.localStorageService.getItem('user', false)
     this.cargarDocumentos()
-    this.cargarUsusarios()
-  }
-
-  reloadComponent() {
-    // Lógica de recarga del componente
-    console.log('reload');
-  }
-
-  ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
-  }
-
-  cargarUsusarios() {
-    this.usuariosService.cargarUsuarios().subscribe({
-      next: (response) => {
-        this.usuarios = response
-      }
-    })
+    //this.cargarUsusarios()
   }
 
   cargarDocumentos(){
@@ -127,42 +86,32 @@ export class DocumentosComponent implements OnInit {
     }
   }
 
-  campoNoValido(campo: string):boolean {
-    if(this.actualizacionDocumentoForm.get(campo)?.invalid && this.formSubmit) {
-      return true;
-    } else {
-      return false;
-    }
+  editarDocumento(documento: any) {
+    this.modalNewDocument.usuario = this.usuarioLogueadoID
+    this.modalNewDocument.titulo = "Modificar datos del documento"
+    this.modalNewDocument.data = documento
+    this.modalNewDocument.tipo = "UPDATE"
+
+    this.modalNewDocument.openModal();
   }
 
-  seleccionarDocumento(id: string) {
-    this.documento = this.documentos.filter(doc => doc._id === id)
-    this.actualizacionDocumentoForm.patchValue({
-      _id: this.documento[0]._id,
-      nombre: this.documento[0].nombre,
-      fecha: this.documento[0].fecha,
-      estado: this.documento[0].estado,
-      observacion: this.documento[0].observacion,
-      usuario: this.documento[0].usuario
-    })
+  mostrarDatosDocumento(documento: any){
+    this.modalNewDocument.usuario = this.usuarioLogueadoID
+    this.modalNewDocument.tipo = "VIEWSAVE"
+    this.modalNewDocument.titulo = "Ver datos del documento"
+    this.modalNewDocument.data = documento
+    this.modalNewDocument.openModal();
   }
 
-  actualizarDocumento() {
-    this.formSubmit = true
+  mostrarControlesEdicion(documento: any): boolean {
+    return this.usuarioLogueadoID === documento.usuarioCreacion?._id ? true : false
+  }
 
-    if(this.actualizacionDocumentoForm.invalid){
-      return;
-    }
-
-    let doc: Documentos = this.documento[0]
-    doc.nombre = this.actualizacionDocumentoForm.get('nombre')?.value
-    doc.fecha = this.actualizacionDocumentoForm.get('fecha')?.value
-    //doc.usuario = this.actualizacionDocumentoForm.get('usuario')?.value
-    this.documentosService.editarDocumento(doc).subscribe({
+  cambioEstado(documento: any) {
+    this.documentosService.editarDocumento(documento).subscribe({
       next: (resp) => {
         this.alertMessageService.mensajeCortoExitosoOk("Datos Guardados")
 
-        this.fileInput?.nativeElement.click();
         this.router.navigate(['/dashboard/temporary-route'], { skipLocationChange: true }).then(() => {
           this.router.navigateByUrl(`/dashboard/documentos`);
         });
@@ -173,7 +122,7 @@ export class DocumentosComponent implements OnInit {
     })
   }
 
-  editarArchivo(id: string) {
+  subirArchivo(id: string) {
     this.router.navigateByUrl(`/dashboard/documentos/${id}`)
   }
 
@@ -205,47 +154,15 @@ export class DocumentosComponent implements OnInit {
     });
   }
 
-  cambiarUsuario() {
+
+/*
+cambiarUsuario() {
     if(this.cambioDeUsuario===false) {
       this.cambioDeUsuario = true
     } else {
       this.cambioDeUsuario = false
     }
   }
+*/
 
-  mostrarControlesEdicion(documento: any): boolean {
-    return this.usuarioLogueadoID === documento.usuarioCreacion?._id ? true : false
-  }
-
-  cambioEstado(documento: any) {
-    this.documentosService.editarDocumento(documento).subscribe({
-      next: (resp) => {
-        this.alertMessageService.mensajeCortoExitosoOk("Datos Guardados")
-
-        this.router.navigate(['/dashboard/temporary-route'], { skipLocationChange: true }).then(() => {
-          this.router.navigateByUrl(`/dashboard/documentos`);
-        });
-      },
-      error: (error) => {
-        this.alertMessageService.mensajeErrorOk(error.status, "Oops...", error.msg)
-      }
-    })
-  }
-
-  actualizarObsercion() {
-    this.documentosService.editarDocumento(this.actualizacionDocumentoForm.value).subscribe({
-      next: (resp) => {
-        console.log(resp)
-        this.alertMessageService.mensajeCortoExitosoOk("Datos Guardados")
-
-        this.modalObs?.nativeElement.click();
-        this.router.navigate(['/dashboard/temporary-route'], { skipLocationChange: true }).then(() => {
-          this.router.navigateByUrl(`/dashboard/documentos`);
-        });
-      },
-      error: (error) => {
-        this.alertMessageService.mensajeErrorOk(error.status, "Oops...", error.msg)
-      }
-    })
-  }
 }

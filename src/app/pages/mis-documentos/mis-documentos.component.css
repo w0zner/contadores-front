@@ -1,0 +1,9 @@
+.link-button {
+  background: none;
+  border: none;
+}
+
+.link-button:hover,
+.link-button:focus {
+  outline: none;
+}
