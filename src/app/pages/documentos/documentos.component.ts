@@ -72,12 +72,9 @@ export class DocumentosComponent implements OnInit {
         this.buscarService.buscarTermino('documentos', termino).subscribe({
           next: (resp: any[]) => {
             this.documentos = resp
-            console.log(this.documentos)
 
             this.facturas = this.documentos.filter(doc => doc.tipo === 'FACTURA');
             this.informes = this.documentos.filter(doc => doc.tipo === 'INFORME');
-            console.log(this.facturas)
-            console.log(this.informes)
           }
         })
       }

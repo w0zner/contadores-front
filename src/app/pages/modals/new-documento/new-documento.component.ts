@@ -1,7 +1,6 @@
-import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Documentos } from 'src/app/models/documentos.model';
 import { AlertMessageService } from 'src/app/services/alert-message.service';
 import { DocumentosService } from 'src/app/services/documentos.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
@@ -69,14 +68,12 @@ export class NewDocumentoComponent implements OnInit {
     }
   }
 
-  actualizarDocumento() {
+  almacenarDocumento() {
     this.isSubmit = true
 
     if(this.documentoForm.invalid){
       return;
     }
-
-    console.log(this.documentoForm.value)
 
     if(this.tipo === "UPDATE" || this.tipo === "VIEWSAVE") {
       this.data.nombre = this.documentoForm.get('nombre')?.value
@@ -88,31 +85,21 @@ export class NewDocumentoComponent implements OnInit {
           this.alertMessageService.mensajeCortoExitosoOk("Documento actualizado exitosamente!")
 
           this.obtenerRolUsuario()
-
-         /*  this.router.navigate(['/dashboard/temporary-route'], { skipLocationChange: true }).then(() => {
-            this.router.navigateByUrl(`/dashboard/documentos/mis-documentos/${this.usuario}`)
-          }); */
         },
         error: (error) => {
           this.alertMessageService.mensajeErrorOk(error.status, "Oops...", "Ocurrio un error al actualizar el documento")
         }
       })
     } else  if(this.tipo === "INSERT") {
-      console.log(this.documentoForm.value)
       this.documentosService.crearDocumento(this.documentoForm.value).subscribe({
         next: (resp:any) => {
           this.alertMessageService.mensajeFlashConfirmation("Datos Guardados")
 
           this.obtenerRolUsuario()
-
-         /*  this.router.navigate(['/dashboard/temporary-route'], { skipLocationChange: true }).then(() => {
-            this.router.navigateByUrl(`/dashboard/documentos/${resp.documento._id}`);
-          }); */
         }
       })
     }
   }
-
 
   obtenerRolUsuario() {
     this.usuariosService.obtenerUsuarioPorId(this.usuario!).subscribe({
